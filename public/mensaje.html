@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mensaje Personalizado</title>
+<style>
+  body { display:flex; justify-content:center; align-items:center; height:100vh; background:#f4f4f4; font-family:sans-serif; text-align:center; }
+  h1 { font-size:2em; }
+</style>
+</head>
+<body>
+<div>
+  <h1 id="mensaje"></h1>
+</div>
+
+<script>
+const mensaje = sessionStorage.getItem('mensajePersonalizado') || "Bienvenido!";
+document.getElementById('mensaje').textContent = mensaje;
+
+// Tras 5 segundos, redirige a la invitación final
+setTimeout(() => {
+  window.location.href = 'invitacion.html';
+}, 5000);
+</script>
+
+</body>
+</html>

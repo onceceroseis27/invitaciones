@@ -1,0 +1,79 @@
+<!-- CONFIRMACION.HTML -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirmación</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial;
+      background: #f8f2ec;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #c5a27a;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+    }
+  </style>
+  <meta http-equiv="Cache-control" content="no-cache">
+</head>
+<body>
+  <form id="formulario">
+    <h2>Confirmación de asistencia</h2>
+    <input type="text" id="nombre" placeholder="Tu nombre" required />
+    <select id="asistencia" required>
+      <option value="">¿Asistirás?</option>
+      <option value="Sí">Sí</option>
+      <option value="No">No</option>
+    </select>
+    <textarea id="comentario" placeholder="Comentario opcional"></textarea>
+    <button type="submit">Enviar</button>
+    <p id="respuesta"></p>
+  </form>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYDUlH-w1eaXEMzPQqiL-mTAhKNouS94kS-mPK1QKT1rUUCq1LSU5fWyFL6cTvKJLv4A/exec";
+
+    document.getElementById("formulario").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const datos = {
+        nombre: document.getElementById("nombre").value,
+        asistencia: document.getElementById("asistencia").value,
+        comentario: document.getElementById("comentario").value,
+        timestamp: new Date().toISOString()
+      };
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      });
+
+      document.getElementById("respuesta").innerText = "¡Gracias! Tu respuesta ha sido enviada.";
+    });
+  </script>
+</body>
+</html>

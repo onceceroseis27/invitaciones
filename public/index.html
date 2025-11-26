@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Introduce tu código</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: "Didot", serif;
+    overflow: hidden;
+}
+.page { position: relative; width: 100%; height: 100%; }
+
+/* Fondo difuminado */
+.bg-blur {
+    position: absolute; inset: 0;
+    background-image: url("images/fondoCodigo.jpeg");
+    background-size: cover;
+    background-position: center;
+    filter: blur(12px) brightness(0.7);
+    transform: scale(1.05);
+    z-index: 1;
+}
+
+/* Imagen principal */
+.photo {
+    position: absolute;
+    top: 50%; left: 50%;
+    height: 96vh; width: auto;
+    max-width: 95vw;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+    z-index: 2;
+    border-radius: 10px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.4);
+}
+
+/* Contenedor del cuadro de código */
+.code-container {
+    position: absolute;
+    bottom: 3%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    width: auto; /* Se ajusta al ancho de la foto */
+}
+
+/* Cuadro del código */
+.code-box {
+    background: rgba(255, 255, 255, 0.83);
+    padding: 20px 25px;
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+    text-align: center;
+    width: 100%;
+}
+
+input {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #aaa;
+    font-size: 18px;
+    width: 200px;
+    text-align: center;
+}
+
+button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: none;
+    background: #d4b88c;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+    <div class="bg-blur"></div>
+    <img class="photo" src="images/fondoCodigo.jpeg" alt="Foto">
+
+    <div class="code-container">
+        <div class="code-box">
+            <p>Introduce tu código:</p>
+            <input type="text" id="codigo" placeholder="XXXX">
+            <button onclick="validarCodigo()">Aceptar</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Ajusta el ancho del cuadro al ancho visible de la foto
+window.addEventListener("load", () => {
+    const foto = document.querySelector(".photo");
+    const caja = document.querySelector(".code-container");
+    setTimeout(() => {
+        const anchoFoto = foto.getBoundingClientRect().width;
+        caja.style.width = anchoFoto + "px";
+    }, 50);
+});
+
+// Validación de códigos llamando al servidor Node.js en Render
+async function validarCodigo() {
+    const codigo = document.getElementById('codigo').value.trim().toUpperCase();
+    const serverURL = "https://TU-SERVIDOR-RENDER.onrender.com"; // <--- reemplaza con tu URL de Render
+
+    try {
+        const response = await fetch(`${serverURL}/validar/${codigo}`);
+        const data = await response.json();
+
+        if (data.success) {
+            window.location.href = `${serverURL}/${data.page}`;
+        } else {
+            alert("Código incorrecto");
+        }
+    } catch (error) {
+        console.error("Error conectando al servidor:", error);
+        alert("No se pudo validar el código. Intenta más tarde.");
+    }
+}
+</script>
+
+</body>
+</html>
+
