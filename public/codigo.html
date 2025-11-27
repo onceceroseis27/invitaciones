@@ -123,23 +123,38 @@ function ajustarCaja() {
     }, 50);
 }
 
-/* Lógica de códigos personalizados */
-function verificarCodigo() {
+/* Nueva lógica: validación contra el servidor en Render */
+async function verificarCodigo() {
     const codigo = document.getElementById('codigo').value.trim();
 
-    const codigos = {
-        "ANA1": "personalizado_ana.html",
-        "LUIS2": "personalizado_luis.html",
-        "FAM3": "personalizado_familia.html"
-    };
+    if (!codigo) {
+        alert("Introduce un código");
+        return;
+    }
 
-    if (codigos[codigo]) {
-        window.location.href = codigos[codigo];
-    } else {
-        alert("Código incorrecto");
+    try {
+        const respuesta = await fetch("https://invitaciones-lands.onrender.com", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ codigo })
+        });
+
+        const data = await respuesta.json();
+
+        if (data.valido) {
+            // Redirigir a la página que manda el servidor
+            window.location.href = data.pagina;
+        } else {
+            alert("Código incorrecto");
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert("Error al conectar con el servidor");
     }
 }
 </script>
+
 
 </body>
 </html>
