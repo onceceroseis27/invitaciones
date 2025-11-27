@@ -17,20 +17,15 @@ const codigosValidos = {
 };
 
 app.post("/validar", (req, res) => {
-  const { codigo } = req.body;
+    const { codigo } = req.body;
 
-  if (!codigo) {
-    return res.status(400).json({ error: "Código no recibido" });
-  }
+    if (!codigo || !mensajes[codigo]) {
+        return res.json({ valido: false, mensaje: "Código incorrecto" });
+    }
 
-  const nombre = codigosValidos[codigo];
-
-  if (!nombre) {
-    return res.status(404).json({ error: "Código incorrecto" });
-  }
-
-  return res.json({ nombre });
+    return res.json({ valido: true, mensaje: mensajes[codigo] });
 });
+
 
 // PARA RENDER: puerto dinámico
 const PORT = process.env.PORT || 3000;

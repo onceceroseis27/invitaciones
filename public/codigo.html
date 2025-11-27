@@ -142,10 +142,19 @@ async function verificarCodigo() {
         const data = await respuesta.json();
 
         if (data.valido) {
-            // Redirigir a la página que manda el servidor
-            window.location.href = data.pagina;
+            // Muestra mensaje directamente en pantalla
+            document.body.innerHTML = `
+                <div style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:'Didot',serif;font-size:24px;text-align:center;">
+                    ${data.mensaje}
+                </div>
+            `;
+
+            // Después de 5 segundos, redirige a la invitación
+            setTimeout(() => {
+                window.location.href = "/invitacion.html"; // o tu página final
+            }, 5000);
         } else {
-            alert("Código incorrecto");
+            alert(data.mensaje);
         }
 
     } catch (error) {
@@ -153,6 +162,7 @@ async function verificarCodigo() {
         alert("Error al conectar con el servidor");
     }
 }
+
 </script>
 
 
