@@ -133,7 +133,7 @@ async function verificarCodigo() {
     }
 
     try {
-        const respuesta = await fetch("https://invitaciones-lands.onrender.com", {
+        const respuesta = await fetch("https://invitaciones-lands.onrender.com/validar", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ codigo })
