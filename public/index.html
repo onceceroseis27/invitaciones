@@ -1,136 +1,154 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Introduce tu código</title>
-
+<meta charset="UTF-8">
+<title>Invitación</title>
 <style>
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    font-family: "Didot", serif;
-    overflow: hidden;
-}
-.page { position: relative; width: 100%; height: 100%; }
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #e6dfd3; /* Beige suave */
+        font-family: "Georgia", serif;
+    }
 
-/* Fondo difuminado */
-.bg-blur {
-    position: absolute; inset: 0;
-    background-image: url("images/fondoCodigo.jpeg");
-    background-size: cover;
-    background-position: center;
-    filter: blur(12px) brightness(0.7);
-    transform: scale(1.05);
-    z-index: 1;
-}
+    /* CONTENEDOR GENERAL */
+    .sobre-contenedor {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
 
-/* Imagen principal */
-.photo {
-    position: absolute;
-    top: 50%; left: 50%;
-    height: 96vh; width: auto;
-    max-width: 95vw;
-    transform: translate(-50%, -50%);
-    object-fit: contain;
-    z-index: 2;
-    border-radius: 10px;
-    box-shadow: 0 0 25px rgba(0,0,0,0.4);
-}
+    /* PARTE INFERIOR (gris) */
+    .sobre-abajo {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #d0c8b8;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        transition: transform 1s ease-in-out;
+    }
 
-/* Contenedor del cuadro de código */
-.code-container {
-    position: absolute;
-    bottom: 3%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 3;
-    display: flex;
-    justify-content: center;
-    width: auto; /* Se ajusta al ancho de la foto */
-}
+    /* SOLAPA SUPERIOR */
+    .solapa {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60%;
+        background: #f3ecdf; /* Beige más claro */
+        clip-path: polygon(0 0, 100% 0, 50% 100%);
+        z-index: 5;
+        transition: transform 1s ease-in-out;
+        transform-origin: bottom center;
+    }
 
-/* Cuadro del código */
-.code-box {
-    background: rgba(255, 255, 255, 0.83);
-    padding: 20px 25px;
-    border-radius: 12px;
-    backdrop-filter: blur(4px);
-    text-align: center;
-    width: 100%;
-}
+    /* SELLO */
+    .sello {
+        position: absolute;
+        width: 160px;
+        height: 160px;
+        left: 50%;
+        top: calc(60% - 80px); /* 60% (fin del triángulo) - mitad del sello */
+        transform: translateX(-50%);
+        z-index: 10;
+        pointer-events: auto;
+        cursor: pointer;
+    }
 
-input {
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid #aaa;
-    font-size: 18px;
-    width: 200px;
-    text-align: center;
-}
-
-button {
-    margin-left: 10px;
-    padding: 10px 20px;
-    font-size: 18px;
-    border-radius: 8px;
-    border: none;
-    background: #d4b88c;
-    cursor: pointer;
-}
+    /* LÍNEAS DIAGONALES */
+    .linea-diagonal {
+        position: absolute;
+        width: 3px;
+        background: rgba(0,0,0,0.30);
+        box-shadow: 0 0 8px rgba(0,0,0,0.45);
+        transform-origin: top left;
+        z-index: 4; /* Por encima del sobre */
+    }
 </style>
 </head>
 <body>
 
-<div class="page">
+<div class="sobre-contenedor">
 
-    <div class="bg-blur"></div>
-    <img class="photo" src="images/fondoCodigo.jpeg" alt="Foto">
+    <!-- Líneas diagonales -->
+    <div class="linea-diagonal linea-superior-derecha"></div>
+    <div class="linea-diagonal linea-inferior-derecha"></div>
 
-    <div class="code-container">
-        <div class="code-box">
-            <p>Introduce tu código:</p>
-            <input type="text" id="codigo" placeholder="XXXX">
-            <button onclick="validarCodigo()">Aceptar</button>
-        </div>
-    </div>
+    <div class="solapa"></div>
+    <div class="sobre-abajo"></div>
+
+    <img src="images/Sello.png" class="sello" id="sello" alt="Sello">
 
 </div>
 
 <script>
-// Ajusta el ancho del cuadro al ancho visible de la foto
-window.addEventListener("load", () => {
-    const foto = document.querySelector(".photo");
-    const caja = document.querySelector(".code-container");
-    setTimeout(() => {
-        const anchoFoto = foto.getBoundingClientRect().width;
-        caja.style.width = anchoFoto + "px";
-    }, 50);
-});
+/* ===========================================
+   CALCULAR LÍNEAS DESDE ESQUINAS AL SELLO
+   =========================================== */
 
-// Validación de códigos llamando al servidor Node.js en Render
-async function validarCodigo() {
-    const codigo = document.getElementById('codigo').value.trim().toUpperCase();
-    const serverURL = "https://TU-SERVIDOR-RENDER.onrender.com"; // <--- reemplaza con tu URL de Render
+function calcularLineas() {
+    const sello = document.querySelector('.sello');
+    const lineaSup = document.querySelector('.linea-superior-derecha');
+    const lineaInf = document.querySelector('.linea-inferior-derecha');
 
-    try {
-        const response = await fetch(`${serverURL}/validar/${codigo}`);
-        const data = await response.json();
+    const selloRect = sello.getBoundingClientRect();
+    const selloX = selloRect.left + selloRect.width / 2;
+    const selloY = selloRect.top + selloRect.height / 2;
 
-        if (data.success) {
-            window.location.href = `${serverURL}/${data.page}`;
-        } else {
-            alert("Código incorrecto");
-        }
-    } catch (error) {
-        console.error("Error conectando al servidor:", error);
-        alert("No se pudo validar el código. Intenta más tarde.");
-    }
+    // Esquina superior derecha
+    let x1 = window.innerWidth;
+    let y1 = 0;
+
+    // Esquina inferior derecha
+    let x2 = window.innerWidth;
+    let y2 = window.innerHeight;
+
+    /* --- LÍNEA SUPERIOR DERECHA --- */
+    let dx1 = selloX - x1;
+    let dy1 = selloY - y1;
+    let dist1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+    let ang1 = Math.atan2(dy1, dx1) * (180 / Math.PI);
+
+    lineaSup.style.top = "0px";
+    lineaSup.style.right = "0px";
+    lineaSup.style.height = dist1 + "px";
+    lineaSup.style.transform = `rotate(${ang1}deg)`;
+
+    /* --- LÍNEA INFERIOR DERECHA --- */
+    let dx2 = selloX - x2;
+    let dy2 = selloY - y2;
+    let dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+    let ang2 = Math.atan2(dy2, dx2) * (180 / Math.PI);
+
+    lineaInf.style.bottom = "0px";
+    lineaInf.style.right = "0px";
+    lineaInf.style.height = dist2 + "px";
+    lineaInf.style.transform = `rotate(${ang2}deg)`;
 }
+
+window.addEventListener('load', calcularLineas);
+window.addEventListener('resize', calcularLineas);
+
+/* ===========================================
+   ANIMACIÓN DE APERTURA
+   =========================================== */
+
+document.getElementById('sello').addEventListener('click', () => {
+
+    document.querySelector('.solapa').style.transform = "translateY(-120%)";
+    document.querySelector('.sobre-abajo').style.transform = "translateY(100%)";
+
+    setTimeout(() => {
+        window.location.href = "codigo.html";
+    }, 1200);
+});
 </script>
 
 </body>
 </html>
-
