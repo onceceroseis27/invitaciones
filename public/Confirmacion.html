@@ -41,7 +41,7 @@
 <body>
   <form id="formulario">
     <h2>Confirmación de asistencia</h2>
-    <input type="text" id="nombre" placeholder="Tu nombre" required />
+    <input type="text" id="invitados" placeholder="Tu nombre" required />
     <select id="asistencia" required>
       <option value="">¿Asistirás?</option>
       <option value="Sí">Sí</option>
@@ -53,13 +53,13 @@
   </form>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYDUlH-w1eaXEMzPQqiL-mTAhKNouS94kS-mPK1QKT1rUUCq1LSU5fWyFL6cTvKJLv4A/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwglQHcFXUQixNhR3CWMVPKfUzgQoiNk-yWSc9liBJFaocyVda3Px5RGSEPsVmnSInRAA/exec";
 
     document.getElementById("formulario").addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const datos = {
-        nombre: document.getElementById("nombre").value,
+        invitados: document.getElementById("invitados").value,
         asistencia: document.getElementById("asistencia").value,
         comentario: document.getElementById("comentario").value,
         timestamp: new Date().toISOString()

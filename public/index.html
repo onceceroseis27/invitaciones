@@ -2,152 +2,147 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invitación</title>
+
 <style>
-    body, html {
+    html, body {
         margin: 0;
         padding: 0;
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background: #e6dfd3; /* Beige suave */
-        font-family: "Georgia", serif;
+        background: #e8dfd1; /* Beige suave */
     }
 
-    /* CONTENEDOR GENERAL */
-    .sobre-contenedor {
+    /* CONTENEDOR GENERAL DEL SOBRE */
+    .sobre-container {
         position: relative;
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         overflow: hidden;
+        background: #e8dfd1;
     }
 
-    /* PARTE INFERIOR (gris) */
-    .sobre-abajo {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: #d0c8b8;
-        top: 0;
-        left: 0;
-        z-index: 1;
-        transition: transform 1s ease-in-out;
-    }
-
-    /* SOLAPA SUPERIOR */
+    /* Solapa superior */
     .solapa {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
-        height: 60%;
-        background: #f3ecdf; /* Beige más claro */
+        height: 55%;
+        background: #f3eadc;
         clip-path: polygon(0 0, 100% 0, 50% 100%);
-        z-index: 5;
-        transition: transform 1s ease-in-out;
-        transform-origin: bottom center;
+        z-index: 3;
+        transition: transform 2s ease-in-out;
     }
 
-    /* SELLO */
+    /* Base del sobre */
+    .base {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 55%;
+        background: #f3eadc;
+        z-index: 1;
+    }
+
+    /* Sello de cera */
     .sello {
         position: absolute;
-        width: 160px;
-        height: 160px;
+        top: 40%;
         left: 50%;
-        top: calc(60% - 80px); /* 60% (fin del triángulo) - mitad del sello */
+        width: 90px;
         transform: translateX(-50%);
-        z-index: 10;
-        pointer-events: auto;
+        z-index: 4;
         cursor: pointer;
+        transition: transform 0.3s ease;
     }
 
-    /* LÍNEAS DIAGONALES */
-    .linea-diagonal {
+    .sello:hover {
+        transform: translateX(-50%) scale(1.05);
+    }
+
+    /* Efecto sombra líneas */
+    .linea {
         position: absolute;
-        width: 3px;
-        background: rgba(0,0,0,0.30);
-        box-shadow: 0 0 8px rgba(0,0,0,0.45);
-        transform-origin: top left;
-        z-index: 4; /* Por encima del sobre */
+        width: 2px;
+        background: rgba(0,0,0,0.25);
+        z-index: 2;
+    }
+
+    .linea1 {
+        top: 0;
+        right: 0;
+        height: 60%;
+        transform: rotate(-52deg);
+        transform-origin: top;
+    }
+
+    .linea2 {
+        bottom: 0;
+        right: 0;
+        height: 60%;
+        transform: rotate(52deg);
+        transform-origin: bottom;
+    }
+
+    /* ANIMACIÓN DE APERTURA */
+    .solapa.abierta {
+        transform: translateY(-100%);
+    }
+
+    .base.abierta {
+        transform: translateY(100%);
+        transition: transform 2s ease-in-out;
+    }
+
+    /* ROTACIÓN EN MÓVIL */
+    @media (max-width: 768px) {
+        .sobre-container {
+            transform: rotate(-90deg);
+            transform-origin: center center;
+            width: 100vh;
+            height: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
     }
 </style>
+
 </head>
 <body>
 
-<div class="sobre-contenedor">
+<div class="sobre-container">
 
-    <!-- Líneas diagonales -->
-    <div class="linea-diagonal linea-superior-derecha"></div>
-    <div class="linea-diagonal linea-inferior-derecha"></div>
+    <div class="solapa" id="solapa"></div>
 
-    <div class="solapa"></div>
-    <div class="sobre-abajo"></div>
+    <div class="base" id="base"></div>
 
-    <img src="images/Sello.png" class="sello" id="sello" alt="Sello">
+    <!-- Líneas efecto sombra -->
+    <div class="linea linea1"></div>
+    <div class="linea linea2"></div>
+
+    <!-- Sello -->
+    <img src="/images/sello.png" class="sello" id="sello" alt="Sello">
 
 </div>
 
 <script>
-/* ===========================================
-   CALCULAR LÍNEAS DESDE ESQUINAS AL SELLO
-   =========================================== */
+    const sello = document.getElementById("sello");
+    const solapa = document.getElementById("solapa");
+    const base = document.getElementById("base");
 
-function calcularLineas() {
-    const sello = document.querySelector('.sello');
-    const lineaSup = document.querySelector('.linea-superior-derecha');
-    const lineaInf = document.querySelector('.linea-inferior-derecha');
+    sello.addEventListener("click", () => {
+        solapa.classList.add("abierta");
+        base.classList.add("abierta");
 
-    const selloRect = sello.getBoundingClientRect();
-    const selloX = selloRect.left + selloRect.width / 2;
-    const selloY = selloRect.top + selloRect.height / 2;
-
-    // Esquina superior derecha
-    let x1 = window.innerWidth;
-    let y1 = 0;
-
-    // Esquina inferior derecha
-    let x2 = window.innerWidth;
-    let y2 = window.innerHeight;
-
-    /* --- LÍNEA SUPERIOR DERECHA --- */
-    let dx1 = selloX - x1;
-    let dy1 = selloY - y1;
-    let dist1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
-    let ang1 = Math.atan2(dy1, dx1) * (180 / Math.PI);
-
-    lineaSup.style.top = "0px";
-    lineaSup.style.right = "0px";
-    lineaSup.style.height = dist1 + "px";
-    lineaSup.style.transform = `rotate(${ang1}deg)`;
-
-    /* --- LÍNEA INFERIOR DERECHA --- */
-    let dx2 = selloX - x2;
-    let dy2 = selloY - y2;
-    let dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
-    let ang2 = Math.atan2(dy2, dx2) * (180 / Math.PI);
-
-    lineaInf.style.bottom = "0px";
-    lineaInf.style.right = "0px";
-    lineaInf.style.height = dist2 + "px";
-    lineaInf.style.transform = `rotate(${ang2}deg)`;
-}
-
-window.addEventListener('load', calcularLineas);
-window.addEventListener('resize', calcularLineas);
-
-/* ===========================================
-   ANIMACIÓN DE APERTURA
-   =========================================== */
-
-document.getElementById('sello').addEventListener('click', () => {
-
-    document.querySelector('.solapa').style.transform = "translateY(-120%)";
-    document.querySelector('.sobre-abajo').style.transform = "translateY(100%)";
-
-    setTimeout(() => {
-        window.location.href = "codigo.html";
-    }, 1200);
-});
+        setTimeout(() => {
+            window.location.href = "codigo.html"; 
+        }, 2000);
+    });
 </script>
 
 </body>
