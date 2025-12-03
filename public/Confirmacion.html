@@ -1,79 +1,70 @@
-<!-- CONFIRMACION.HTML -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Confirmación</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: Arial;
-      background: #f8f2ec;
-    }
-    form {
-      max-width: 400px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #c5a27a;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 18px;
-    }
-  </style>
-  <meta http-equiv="Cache-control" content="no-cache">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmación</title>
+<style>
+body { margin:0; padding:20px; font-family:Arial,sans-serif; background:#f8f2ec; }
+form { max-width:400px; margin:auto; background:white; padding:20px; border-radius:12px; }
+input, select, textarea { width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc; }
+button { width:100%; padding:12px; background:#c5a27a; color:white; border:none; border-radius:10px; font-size:18px; cursor:pointer; }
+</style>
 </head>
 <body>
-  <form id="formulario">
-    <h2>Confirmación de asistencia</h2>
-    <input type="text" id="invitados" placeholder="Tu nombre" required />
-    <select id="asistencia" required>
-      <option value="">¿Asistirás?</option>
-      <option value="Sí">Sí</option>
-      <option value="No">No</option>
-    </select>
-    <textarea id="comentario" placeholder="Comentario opcional"></textarea>
-    <button type="submit">Enviar</button>
-    <p id="respuesta"></p>
-  </form>
 
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwglQHcFXUQixNhR3CWMVPKfUzgQoiNk-yWSc9liBJFaocyVda3Px5RGSEPsVmnSInRAA/exec";
+<form id="formulario">
+<h2>Confirmación de asistencia</h2>
+<input type="text" id="invitados" placeholder="Tu nombre" required>
+<select id="asistencia" required>
+<option value="">¿Asistirás?</option>
+<option value="Sí">Sí</option>
+<option value="No">No</option>
+</select>
+<input type="number" id="num_personas" placeholder="Número de personas" min="1" style="display:none;">
+<textarea id="comentario" placeholder="Comentario opcional"></textarea>
+<button type="submit">Enviar</button>
+</form>
 
-    document.getElementById("formulario").addEventListener("submit", async (e) => {
-      e.preventDefault();
+<script>
+const formulario = document.getElementById("formulario");
+const asistencia = document.getElementById("asistencia");
+const num_personas = document.getElementById("num_personas");
+const params = new URLSearchParams(window.location.search);
+const codigo = params.get("codigo") || "";
 
-      const datos = {
+if(!codigo){ alert("Código no encontrado"); window.location.href="codigo.html"; }
+
+asistencia.addEventListener("change", ()=>{ num_personas.style.display = asistencia.value==="Sí"?"block":"none"; });
+
+async function verificarEnvio(){
+    const resp = await fetch(`/verificar/${codigo}`);
+    const data = await resp.json();
+    return data.enviado;
+}
+
+formulario.addEventListener("submit", async e=>{
+    e.preventDefault();
+    if(await verificarEnvio()){
+        alert("Ya has completado el cuestionario anteriormente, para cualquier cambio ponte en contacto con los novios.");
+        formulario.style.display="none";
+        return;
+    }
+
+    const datos = {
+        codigo: codigo,
+        num_personas: asistencia.value==="Sí"?num_personas.value:0,
         invitados: document.getElementById("invitados").value,
-        asistencia: document.getElementById("asistencia").value,
+        asistencia: asistencia.value,
         comentario: document.getElementById("comentario").value,
         timestamp: new Date().toISOString()
-      };
+    };
 
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos)
-      });
-
-      document.getElementById("respuesta").innerText = "¡Gracias! Tu respuesta ha sido enviada.";
-    });
-  </script>
+    try{
+        await fetch("/confirmar", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(datos) });
+        window.location.href="mensaje.html";
+    }catch(err){ console.error(err); alert("Error al enviar la confirmación."); }
+});
+</script>
 </body>
 </html>

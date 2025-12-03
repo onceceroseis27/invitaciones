@@ -1,28 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mensaje Personalizado</title>
-<style>
-  body { display:flex; justify-content:center; align-items:center; height:100vh; background:#f4f4f4; font-family:sans-serif; text-align:center; }
-  h1 { font-size:2em; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>¡Gracias por tu confirmación!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f8f2ec;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .mensaje {
+      background: #dff0d8;
+      color: #3c763d;
+      padding: 25px 35px;
+      border-radius: 12px;
+      font-size: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
 <body>
-<div>
-  <h1 id="mensaje"></h1>
-</div>
+  <div class="mensaje" id="mensaje"></div>
 
-<script>
-const mensaje = sessionStorage.getItem('mensajePersonalizado') || "Bienvenido!";
-document.getElementById('mensaje').textContent = mensaje;
+  <script>
+    // Obtener parámetros de la URL
+    const params = new URLSearchParams(window.location.search);
+    const nombre = params.get('nombre') || '';
 
-// Tras 5 segundos, redirige a la invitación final
-setTimeout(() => {
-  window.location.href = 'invitacion.html';
-}, 5000);
-</script>
+    // Mostrar mensaje
+    const mensajeDiv = document.getElementById('mensaje');
+    mensajeDiv.innerHTML = `¡Gracias ${nombre}! Tu respuesta ha sido enviada.`;
 
+    // No hay redirección automática
+  </script>
 </body>
 </html>
