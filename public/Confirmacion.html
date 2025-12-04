@@ -11,8 +11,6 @@
   input[type="text"], input[type="number"], textarea, select { width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-top:6px; }
   textarea { min-height:90px; }
   .hidden { display:none; }
-  .row { display:flex; gap:12px; }
-  .small { max-width:180px; }
   button { margin-top:14px; width:100%; padding:12px; background:#c5a27a; color:#fff; border:none; border-radius:8px; cursor:pointer; }
   .error { color:#b33; margin-top:8px; }
 </style>
@@ -46,47 +44,43 @@
   </div>
 
   <div id="block-bus-detalles" class="hidden">
-    <label for="trayectos">¿Qué trayecto/s tienes pensado hacer?
-      <select id="trayectos">
-        <option value="">Seleccione...</option>
-        <option value="Ida">Ida</option>
-        <option value="Vuelta">Vuelta</option>
-        <option value="Ida y vuelta">Ida y vuelta</option>
-      </select>
-    </label>
+    <label for="trayectos">¿Qué trayecto/s tienes pensado hacer?</label>
+    <select id="trayectos">
+      <option value="">Seleccione...</option>
+      <option value="Ida">Ida</option>
+      <option value="Vuelta">Vuelta</option>
+      <option value="Ida y vuelta">Ida y vuelta</option>
+    </select>
 
     <div id="block-salida" class="hidden">
-      <label for="salida">Lugar de salida
-        <select id="salida">
-          <option value="">Seleccione...</option>
-          <option value="Pedroso">Pedroso</option>
-          <option value="Cayón">Cayón</option>
-        </select>
-      </label>
-    </div>
-
-    <label for="llegada">Lugar de llegada
-      <select id="llegada">
+      <label for="salida">Lugar de salida</label>
+      <select id="salida">
         <option value="">Seleccione...</option>
         <option value="Pedroso">Pedroso</option>
         <option value="Cayón">Cayón</option>
       </select>
-    </label>
+    </div>
 
-    <label for="hora">Hora de salida
-      <select id="hora">
-        <option value="">Seleccione...</option>
-        <option value="1:30">1:30</option>
-        <option value="4:30">4:30</option>
-      </select>
-    </label>
+    <label for="llegada">Lugar de llegada</label>
+    <select id="llegada">
+      <option value="">Seleccione...</option>
+      <option value="Pedroso">Pedroso</option>
+      <option value="Cayón">Cayón</option>
+    </select>
+
+    <label for="hora">Hora de salida</label>
+    <select id="hora">
+      <option value="">Seleccione...</option>
+      <option value="1:30">1:30</option>
+      <option value="4:30">4:30</option>
+    </select>
   </div>
 
   <label for="comentarios">Comentarios adicionales</label>
   <textarea id="comentarios" placeholder="Opcional"></textarea>
 
   <div id="error" class="error hidden"></div>
-  <button type="submit">Enviar confirmación</button>
+  <button type="submit" id="submitBtn">Enviar confirmación</button>
 </form>
 
 <script>
@@ -108,9 +102,11 @@ const llegada = $('llegada');
 const hora = $('hora');
 const comentarios = $('comentarios');
 const errorBox = $('error');
+const submitBtn = $('submitBtn');
 
 function show(el){ el.classList.remove('hidden'); }
-function hide(el){ el.classList.add('hidden'); }
+function hide(el){ if(!el.classList.contains('hidden')) el.classList.add('hidden'); }
+function showError(msg){ errorBox.textContent = msg; errorBox.classList.remove('hidden'); }
 
 asistencia.addEventListener('change', () => {
   errorBox.classList.add('hidden');
@@ -126,10 +122,6 @@ asistencia.addEventListener('change', () => {
     hide(blockSalida);
     num_personas.required = false;
     usar_bus.required = false;
-    trayectos.required = false;
-    salida.required = false;
-    llegada.required = false;
-    hora.required = false;
   }
 });
 
@@ -140,8 +132,6 @@ usar_bus.addEventListener('change', () => {
     trayectos.required = true;
     llegada.required = true;
     hora.required = true;
-    // Mostrar/ocultar salida según trayecto
-    checkTrayecto();
   } else {
     hide(blockBusDetalles);
     hide(blockSalida);
@@ -152,9 +142,7 @@ usar_bus.addEventListener('change', () => {
   }
 });
 
-trayectos.addEventListener('change', checkTrayecto);
-
-function checkTrayecto() {
+trayectos.addEventListener('change', () => {
   if (trayectos.value === 'Ida' || trayectos.value === 'Ida y vuelta') {
     show(blockSalida);
     salida.required = true;
@@ -162,58 +150,56 @@ function checkTrayecto() {
     hide(blockSalida);
     salida.required = false;
   }
-}
-
-function showError(msg){
-  errorBox.textContent = msg;
-  errorBox.classList.remove('hidden');
-}
-
-async function postFormUrlEncoded(url, obj) {
-  const body = new URLSearchParams();
-  for (const k in obj) body.append(k, obj[k]);
-  return fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-    body: body.toString()
-  });
-}
+});
 
 form.addEventListener('submit', async (ev) => {
   ev.preventDefault();
   errorBox.classList.add('hidden');
 
-  // Validaciones básicas
+  // Validaciones
   if (!asistencia.value) { showError('Selecciona si asistirás o no.'); return; }
-  if (!nombres.value.trim()) { showError('Indica tu nombre.'); return; }
+  if (!nombres.value.trim()) { showError('Indica el nombre aunque no asistas.'); return; }
   if (asistencia.value === 'Sí' && (!num_personas.value || Number(num_personas.value) < 1)) { showError('Indica un número de personas válido.'); return; }
   if (asistencia.value === 'Sí' && usar_bus.value === 'Sí') {
-    if (!trayectos.value) { showError('Indica el trayecto.'); return; }
-    if ((trayectos.value === 'Ida' || trayectos.value === 'Ida y vuelta') && !salida.value) { showError('Indica lugar de salida.'); return; }
-    if (!llegada.value) { showError('Indica lugar de llegada.'); return; }
-    if (!hora.value) { showError('Selecciona hora de salida.'); return; }
+    if (!trayectos.value) { showError('Selecciona trayecto'); return; }
+    if ((trayectos.value === 'Ida' || trayectos.value === 'Ida y vuelta') && !salida.value) { showError('Selecciona lugar de salida'); return; }
+    if (!llegada.value) { showError('Selecciona lugar de llegada'); return; }
+    if (!hora.value) { showError('Selecciona hora de salida'); return; }
   }
 
+  // Construir payload
   const payload = {
-    num_personas: (asistencia.value === 'Sí') ? num_personas.value : '',
+    num_personas: asistencia.value === 'Sí' ? num_personas.value : '',
     nombres: nombres.value.trim(),
     asistencia: asistencia.value,
     fecha: new Date().toISOString(),
-    comentarios: comentarios.value.trim(),
+    comentarios: comentarios.value.trim() || '',
     bus: (asistencia.value === 'Sí') ? usar_bus.value : 'No',
     trayectos: (usar_bus.value === 'Sí') ? trayectos.value : '',
-    salida: (usar_bus.value === 'Sí') ? ((trayectos.value === 'Ida' || trayectos.value === 'Ida y vuelta') ? salida.value : '') : '',
+    salida: (usar_bus.value === 'Sí' && (trayectos.value === 'Ida' || trayectos.value === 'Ida y vuelta')) ? salida.value : '',
     llegada: (usar_bus.value === 'Sí') ? llegada.value : '',
     hora: (usar_bus.value === 'Sí') ? hora.value : ''
   };
 
+  // Deshabilitar botón y mostrar “Enviando…”
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Enviando...';
+
   try {
-    await postFormUrlEncoded(SCRIPT_URL, payload);
-    // Redirigir pasando nombre
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+      body: new URLSearchParams(payload).toString()
+    });
+
+    // Redirigir aunque la respuesta no tenga CORS
     window.location.href = 'mensaje.html?nombre=' + encodeURIComponent(payload.nombres);
-  } catch(err) {
+
+  } catch (err) {
     console.error(err);
-    showError('Error de conexión. Inténtalo de nuevo.');
+    showError('Error de conexión al enviar los datos. Inténtalo de nuevo más tarde.');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Enviar confirmación';
   }
 });
 </script>

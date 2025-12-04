@@ -72,13 +72,29 @@ button {
     background: #d4b88c;
     cursor: pointer;
 }
+
+/* Pantalla de mensaje a pantalla completa */
+#mensaje-pantalla {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    font-size: 28px;
+    font-weight: 600;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    z-index: 9999;
+}
 </style>
 </head>
 <body>
 <div class="page">
     <div class="bg-blur"></div>
     <img class="photo" src="images/fondoCodigo.jpeg" alt="Foto">
-    <div class="code-container">
+    <div class="code-container" id="codigo-container">
         <div class="code-box">
             <p>Introduce tu código:</p>
             <input type="text" id="codigo" placeholder="XXXX">
@@ -87,9 +103,14 @@ button {
     </div>
 </div>
 
+<div id="mensaje-pantalla"></div>
+
 <script>
 async function verificarCodigo() {
     const codigo = document.getElementById('codigo').value.trim();
+    const mensajePantalla = document.getElementById('mensaje-pantalla');
+    const codigoContainer = document.getElementById('codigo-container');
+
     if (!codigo) { alert("Introduce un código"); return; }
 
     try {
@@ -99,10 +120,20 @@ async function verificarCodigo() {
             body: JSON.stringify({ codigo })
         });
         const data = await resp.json();
-        if (!data.valido) { alert(data.mensaje); return; }
+        if (!data.valido) { 
+            alert(data.mensaje); 
+            return; 
+        }
 
-        // Redirige a invitacion.html pasando el código en la URL
-        window.location.href = `Invitacion.html`;
+        // Mostrar pantalla completa con el mensaje
+        mensajePantalla.textContent = data.mensaje;
+        mensajePantalla.style.display = "flex";
+        // Ocultar solo después de 5 segundos
+        setTimeout(() => {
+            codigoContainer.style.display = "none";  // Ahora ocultamos el input después del mensaje
+            window.location.href = `Invitacion.html`;
+        }, 5000);
+
     } catch(err) {
         console.error(err);
         alert("Error al conectar con el servidor");
