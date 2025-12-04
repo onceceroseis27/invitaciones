@@ -1,43 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Invitación</title>
 <style>
-body { margin:0; padding:20px; font-family:'Georgia', serif; background:#fffaf7; text-align:center; }
-.boton { display:block; width:fit-content; margin:40px auto; padding:14px 28px; background:#c5a27a; color:white; text-decoration:none; border-radius:10px; font-size:20px; cursor:pointer; }
-.boton.disabled { background:#aaa; cursor:not-allowed; pointer-events:none; }
+body {
+  margin: 0;
+  padding: 20px;
+  background: #fffaf7;
+  font-family: 'Georgia', serif;
+}
+h1, h2, p {
+  text-align: center;
+}
+.boton {
+  display: block;
+  width: fit-content;
+  margin: 40px auto;
+  padding: 14px 28px;
+  background: #c5a27a;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
 </style>
+<meta http-equiv="Cache-control" content="no-cache">
 </head>
 <body>
+
 <h1>Sergio & Leyre "doña Perfecta"</h1>
 <h2>¡Nos casamos!</h2>
 <p>Detalles de la invitación aquí…</p>
-<p><strong>Código de vestimenta:</strong> Venid como más cómodos estéis, solo os pedimos evitar vestir con este color.</p>
+<p><strong>Código de vestimenta:</strong> Venid como más cómodos estéis, solo os pedimos evitar vestir con este color para mantener la armonía del día.</p>
 
-<img src="images/celadon.png" style="width:150px; border-radius:10px; margin-top:20px;">
+<div style="display: block; text-align: center; width: 100%; margin-top: 20px;">
+  <img src="images/celadon.png" alt="Color celadón" style="width:150px; border-radius:10px; display: inline-block;">
+</div>
 
-<a id="botonFormulario" class="boton" href="confirmacion.html">Confirmar asistencia</a>
+<!-- Botón que redirige directamente al Google Form -->
+<a class="boton" href="Confirmacion.html" target="_blank">
+  Confirmar asistencia
+</a>
 
-<script>
-const boton = document.getElementById("botonFormulario");
-const params = new URLSearchParams(window.location.search);
-const codigo = params.get("codigo") || "";
-
-if(!codigo){ boton.classList.add("disabled"); boton.href="#"; }
-else{
-    fetch(`/verificar/${codigo}`)
-        .then(r=>r.json())
-        .then(d=>{
-            if(d.enviado){ boton.classList.add("disabled"); boton.href="#"; }
-            else{ boton.href=`confirmacion.html?codigo=${codigo}`; }
-        }).catch(err=>{
-            console.error(err); boton.classList.add("disabled"); boton.href="#";
-        });
-}
-</script>
 </body>
 </html>
-
 

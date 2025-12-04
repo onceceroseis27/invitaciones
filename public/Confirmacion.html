@@ -1,69 +1,220 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Confirmación</title>
 <style>
-body { margin:0; padding:20px; font-family:Arial,sans-serif; background:#f8f2ec; }
-form { max-width:400px; margin:auto; background:white; padding:20px; border-radius:12px; }
-input, select, textarea { width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc; }
-button { width:100%; padding:12px; background:#c5a27a; color:white; border:none; border-radius:10px; font-size:18px; cursor:pointer; }
+  body { font-family: Arial, sans-serif; background:#f8f2ec; margin:0; padding:20px; }
+  form { max-width:480px; margin:30px auto; background:#fff; padding:18px; border-radius:10px; }
+  label { display:block; margin-top:10px; font-weight:600; }
+  input[type="text"], input[type="number"], textarea, select { width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-top:6px; }
+  textarea { min-height:90px; }
+  .hidden { display:none; }
+  .row { display:flex; gap:12px; }
+  .small { max-width:180px; }
+  button { margin-top:14px; width:100%; padding:12px; background:#c5a27a; color:#fff; border:none; border-radius:8px; cursor:pointer; }
+  .error { color:#b33; margin-top:8px; }
 </style>
 </head>
 <body>
-
 <form id="formulario">
-<h2>Confirmación de asistencia</h2>
-<input type="text" id="invitados" placeholder="Tu nombre" required>
-<select id="asistencia" required>
-<option value="">¿Asistirás?</option>
-<option value="Sí">Sí</option>
-<option value="No">No</option>
-</select>
-<input type="number" id="num_personas" placeholder="Número de personas" min="1" style="display:none;">
-<textarea id="comentario" placeholder="Comentario opcional"></textarea>
-<button type="submit">Enviar</button>
+  <h2>Confirmación de asistencia</h2>
+
+  <label for="asistencia">¿Asistirás?</label>
+  <select id="asistencia" required>
+    <option value="">Selecciona...</option>
+    <option value="Sí">Sí</option>
+    <option value="No">No</option>
+  </select>
+
+  <div id="block-num" class="hidden">
+    <label for="num_personas">Número de personas</label>
+    <input id="num_personas" type="number" min="1" placeholder="Incluyéndote" />
+  </div>
+
+  <label for="nombres">Nombre(s) (si no vas, indica tu nombre)</label>
+  <input id="nombres" type="text" placeholder="Ej: Ana García" required />
+
+  <div id="block-bus" class="hidden">
+    <label for="usar_bus">¿Haréis uso del autobús?</label>
+    <select id="usar_bus">
+      <option value="">Seleccione...</option>
+      <option value="Sí">Sí</option>
+      <option value="No">No</option>
+    </select>
+  </div>
+
+  <div id="block-bus-detalles" class="hidden">
+    <label for="trayectos">¿Qué trayecto/s tienes pensado hacer?
+      <select id="trayectos">
+        <option value="">Seleccione...</option>
+        <option value="Ida">Ida</option>
+        <option value="Vuelta">Vuelta</option>
+        <option value="Ida y vuelta">Ida y vuelta</option>
+      </select>
+    </label>
+
+    <div id="block-salida" class="hidden">
+      <label for="salida">Lugar de salida
+        <select id="salida">
+          <option value="">Seleccione...</option>
+          <option value="Pedroso">Pedroso</option>
+          <option value="Cayón">Cayón</option>
+        </select>
+      </label>
+    </div>
+
+    <label for="llegada">Lugar de llegada
+      <select id="llegada">
+        <option value="">Seleccione...</option>
+        <option value="Pedroso">Pedroso</option>
+        <option value="Cayón">Cayón</option>
+      </select>
+    </label>
+
+    <label for="hora">Hora de salida
+      <select id="hora">
+        <option value="">Seleccione...</option>
+        <option value="1:30">1:30</option>
+        <option value="4:30">4:30</option>
+      </select>
+    </label>
+  </div>
+
+  <label for="comentarios">Comentarios adicionales</label>
+  <textarea id="comentarios" placeholder="Opcional"></textarea>
+
+  <div id="error" class="error hidden"></div>
+  <button type="submit">Enviar confirmación</button>
 </form>
 
 <script>
-const formulario = document.getElementById("formulario");
-const asistencia = document.getElementById("asistencia");
-const num_personas = document.getElementById("num_personas");
-const params = new URLSearchParams(window.location.search);
-const codigo = params.get("codigo") || "";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfp5fIYv7c6JGVL9beSgoSzY_gCT_SVZGcSnU6AiRcJraAn7Yy9jbUPe95Ny7oboOq/exec";
 
-if(!codigo){ alert("Código no encontrado"); window.location.href="codigo.html"; }
+const $ = id => document.getElementById(id);
+const form = $('formulario');
+const asistencia = $('asistencia');
+const blockNum = $('block-num');
+const num_personas = $('num_personas');
+const nombres = $('nombres');
+const blockBus = $('block-bus');
+const usar_bus = $('usar_bus');
+const blockBusDetalles = $('block-bus-detalles');
+const trayectos = $('trayectos');
+const blockSalida = $('block-salida');
+const salida = $('salida');
+const llegada = $('llegada');
+const hora = $('hora');
+const comentarios = $('comentarios');
+const errorBox = $('error');
 
-asistencia.addEventListener("change", ()=>{ num_personas.style.display = asistencia.value==="Sí"?"block":"none"; });
+function show(el){ el.classList.remove('hidden'); }
+function hide(el){ el.classList.add('hidden'); }
 
-async function verificarEnvio(){
-    const resp = await fetch(`/verificar/${codigo}`);
-    const data = await resp.json();
-    return data.enviado;
+asistencia.addEventListener('change', () => {
+  errorBox.classList.add('hidden');
+  if (asistencia.value === 'Sí') {
+    show(blockNum);
+    show(blockBus);
+    num_personas.required = true;
+    usar_bus.required = true;
+  } else {
+    hide(blockNum);
+    hide(blockBus);
+    hide(blockBusDetalles);
+    hide(blockSalida);
+    num_personas.required = false;
+    usar_bus.required = false;
+    trayectos.required = false;
+    salida.required = false;
+    llegada.required = false;
+    hora.required = false;
+  }
+});
+
+usar_bus.addEventListener('change', () => {
+  errorBox.classList.add('hidden');
+  if (usar_bus.value === 'Sí') {
+    show(blockBusDetalles);
+    trayectos.required = true;
+    llegada.required = true;
+    hora.required = true;
+    // Mostrar/ocultar salida según trayecto
+    checkTrayecto();
+  } else {
+    hide(blockBusDetalles);
+    hide(blockSalida);
+    trayectos.required = false;
+    salida.required = false;
+    llegada.required = false;
+    hora.required = false;
+  }
+});
+
+trayectos.addEventListener('change', checkTrayecto);
+
+function checkTrayecto() {
+  if (trayectos.value === 'Ida' || trayectos.value === 'Ida y vuelta') {
+    show(blockSalida);
+    salida.required = true;
+  } else {
+    hide(blockSalida);
+    salida.required = false;
+  }
 }
 
-formulario.addEventListener("submit", async e=>{
-    e.preventDefault();
-    if(await verificarEnvio()){
-        alert("Ya has completado el cuestionario anteriormente, para cualquier cambio ponte en contacto con los novios.");
-        formulario.style.display="none";
-        return;
-    }
+function showError(msg){
+  errorBox.textContent = msg;
+  errorBox.classList.remove('hidden');
+}
 
-    const datos = {
-        codigo: codigo,
-        num_personas: asistencia.value==="Sí"?num_personas.value:0,
-        invitados: document.getElementById("invitados").value,
-        asistencia: asistencia.value,
-        comentario: document.getElementById("comentario").value,
-        timestamp: new Date().toISOString()
-    };
+async function postFormUrlEncoded(url, obj) {
+  const body = new URLSearchParams();
+  for (const k in obj) body.append(k, obj[k]);
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+    body: body.toString()
+  });
+}
 
-    try{
-        await fetch("/confirmar", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(datos) });
-        window.location.href="mensaje.html";
-    }catch(err){ console.error(err); alert("Error al enviar la confirmación."); }
+form.addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  errorBox.classList.add('hidden');
+
+  // Validaciones básicas
+  if (!asistencia.value) { showError('Selecciona si asistirás o no.'); return; }
+  if (!nombres.value.trim()) { showError('Indica tu nombre.'); return; }
+  if (asistencia.value === 'Sí' && (!num_personas.value || Number(num_personas.value) < 1)) { showError('Indica un número de personas válido.'); return; }
+  if (asistencia.value === 'Sí' && usar_bus.value === 'Sí') {
+    if (!trayectos.value) { showError('Indica el trayecto.'); return; }
+    if ((trayectos.value === 'Ida' || trayectos.value === 'Ida y vuelta') && !salida.value) { showError('Indica lugar de salida.'); return; }
+    if (!llegada.value) { showError('Indica lugar de llegada.'); return; }
+    if (!hora.value) { showError('Selecciona hora de salida.'); return; }
+  }
+
+  const payload = {
+    num_personas: (asistencia.value === 'Sí') ? num_personas.value : '',
+    nombres: nombres.value.trim(),
+    asistencia: asistencia.value,
+    fecha: new Date().toISOString(),
+    comentarios: comentarios.value.trim(),
+    bus: (asistencia.value === 'Sí') ? usar_bus.value : 'No',
+    trayectos: (usar_bus.value === 'Sí') ? trayectos.value : '',
+    salida: (usar_bus.value === 'Sí') ? ((trayectos.value === 'Ida' || trayectos.value === 'Ida y vuelta') ? salida.value : '') : '',
+    llegada: (usar_bus.value === 'Sí') ? llegada.value : '',
+    hora: (usar_bus.value === 'Sí') ? hora.value : ''
+  };
+
+  try {
+    await postFormUrlEncoded(SCRIPT_URL, payload);
+    // Redirigir pasando nombre
+    window.location.href = 'mensaje.html?nombre=' + encodeURIComponent(payload.nombres);
+  } catch(err) {
+    console.error(err);
+    showError('Error de conexión. Inténtalo de nuevo.');
+  }
 });
 </script>
 </body>
