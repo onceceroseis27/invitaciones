@@ -18,8 +18,9 @@
 <body>
 <form id="formulario">
   <h2>Confirmación de asistencia</h2>
-
-  <label for="asistencia">¿Asistirás?</label>
+    <label for="nombres">Nombre(s) (si no vas, indica tu nombre)</label>
+      <input id="nombres" type="text" placeholder="Ej: Ana García" required />
+      <label for="asistencia">¿Asistirás?</label>
   <select id="asistencia" required>
     <option value="">Selecciona...</option>
     <option value="Sí">Sí</option>
@@ -30,9 +31,6 @@
     <label for="num_personas">Número de personas</label>
     <input id="num_personas" type="number" min="1" placeholder="Incluyéndote" />
   </div>
-
-  <label for="nombres">Nombre(s) (si no vas, indica tu nombre)</label>
-  <input id="nombres" type="text" placeholder="Ej: Ana García" required />
 
   <div id="block-bus" class="hidden">
     <label for="usar_bus">¿Haréis uso del autobús?</label>
@@ -103,6 +101,10 @@ const hora = $('hora');
 const comentarios = $('comentarios');
 const errorBox = $('error');
 const submitBtn = $('submitBtn');
+const now = new Date();
+const fechaFormateada = now.getFullYear() + "-" 
+                       + String(now.getMonth() + 1).padStart(2,'0') + "-"
+                       + String(now.getDate()).padStart(2,'0');
 
 function show(el){ el.classList.remove('hidden'); }
 function hide(el){ if(!el.classList.contains('hidden')) el.classList.add('hidden'); }
@@ -167,19 +169,19 @@ form.addEventListener('submit', async (ev) => {
     if (!hora.value) { showError('Selecciona hora de salida'); return; }
   }
 
-  // Construir payload
-  const payload = {
-    num_personas: asistencia.value === 'Sí' ? num_personas.value : '',
-    nombres: nombres.value.trim(),
-    asistencia: asistencia.value,
-    fecha: new Date().toISOString(),
-    comentarios: comentarios.value.trim() || '',
-    bus: (asistencia.value === 'Sí') ? usar_bus.value : 'No',
-    trayectos: (usar_bus.value === 'Sí') ? trayectos.value : '',
-    salida: (usar_bus.value === 'Sí' && (trayectos.value === 'Ida' || trayectos.value === 'Ida y vuelta')) ? salida.value : '',
-    llegada: (usar_bus.value === 'Sí') ? llegada.value : '',
-    hora: (usar_bus.value === 'Sí') ? hora.value : ''
-  };
+const payload = {
+  num_personas: (asistencia.value === 'Sí') ? (num_personas.value || '') : '',
+  nombres: nombres.value.trim(),
+  asistencia: asistencia.value,
+  fecha: fechaFormateada,
+  comentarios: comentarios.value.trim() || '',
+  bus: (asistencia.value === 'Sí') ? (usar_bus.value || 'No') : '',
+  trayectos: (usar_bus.value === 'Sí') ? (trayectos.value || '') : '',
+  salida: (usar_bus.value === 'Sí') ? (salida.value || '') : '',
+  llegada: (usar_bus.value === 'Sí') ? (llegada.value || '') : '',
+  hora: (usar_bus.value === 'Sí') ? (getSelectedHour() || '') : ''
+};
+
 
   // Deshabilitar botón y mostrar “Enviando…”
   submitBtn.disabled = true;
