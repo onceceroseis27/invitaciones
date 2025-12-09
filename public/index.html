@@ -1,25 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Página de inicio</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Abrir sobre</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: #f8f2ec;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1200px; /* para efecto 3D */
+    cursor: pointer;
+  }
 
-    body {
-      background: url('images/SobreySello.png') no-repeat center center;
-      background-size: cover;
-      cursor: pointer;
-    }
-  </style>
+  #sobre {
+    width: 60vw;  /* ocupa buena parte de la pantalla */
+    max-width: 400px;
+    transform-origin: top center;
+    transition: transform 1s ease-in-out, opacity 0.5s ease;
+  }
+
+  #sobre.abierto {
+    transform: rotateX(-90deg) translateY(-50%);
+    opacity: 0;
+  }
+</style>
 </head>
-<body onclick="location.href='codigo.html';">
+<body>
+  <img id="sobre" src="images/SobreySello.png" alt="Sobre">
+
+<script>
+  const sobre = document.getElementById('sobre');
+  
+  document.body.addEventListener('click', () => {
+    // Aplicar animación de apertura
+    sobre.classList.add('abierto');
+
+    // Esperar la animación antes de redirigir
+    setTimeout(() => {
+      window.location.href = 'codigo.html';
+    }, 1000); // coincide con la duración de la transición
+  });
+</script>
 </body>
 </html>
