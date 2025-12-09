@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invitación</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: rgba(233, 220, 196, 0.9); /* ahora el color del triángulo */
+}
+
+/* Contenedor de todo el sobre */
+.sobre-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Triángulo (ahora fondo del sobre) */
+.solapa {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #f4eee3; /* antes el fondo general, ahora triángulo */
+    clip-path: polygon(0 0, 0 100%, 50% 50%);
+    z-index: 2;
+    transition: transform 1s ease;
+}
+
+/* Sello centrado */
+.sello {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    transform: translate(-50%, -50%);
+    background-image: url('images/Sello.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 3;
+    cursor: pointer;
+    transition: transform 1s ease;
+}
+
+/* Animación al pulsar el sello */
+.sobre-container.abierto .solapa {
+    transform: translateX(100%) rotate(90deg);
+}
+.sobre-container.abierto .sello {
+    transform: translate(-50%, -150%);
+}
+</style>
+</head>
+
+<body>
+<div class="sobre-container" id="sobre">
+    <div class="solapa"></div>
+    <div class="sello" id="sello"></div>
+</div>
+
+<script>
+const sobre = document.getElementById("sobre");
+const sello = document.getElementById("sello");
+
+sello.addEventListener("click", () => {
+    sobre.classList.add("abierto");
+    setTimeout(() => {
+        window.location.href = "codigo.html";
+    }, 2000);
+});
+</script>
+</body>
+</html>

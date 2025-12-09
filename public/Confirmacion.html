@@ -179,8 +179,9 @@ const payload = {
   trayectos: (usar_bus.value === 'Sí') ? (trayectos.value || '') : '',
   salida: (usar_bus.value === 'Sí') ? (salida.value || '') : '',
   llegada: (usar_bus.value === 'Sí') ? (llegada.value || '') : '',
-  hora: (usar_bus.value === 'Sí') ? (getSelectedHour() || '') : ''
+  hora: (usar_bus.value === 'Sí') ? (hora.value || '') : ''
 };
+
 
 
   // Deshabilitar botón y mostrar “Enviando…”
