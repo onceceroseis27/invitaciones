@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Abrir sobre</title>
+<title>Página de inicio</title>
 <style>
   html, body {
     margin: 0;
@@ -11,19 +11,19 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
-    background: #f8f2ec;
     display: flex;
     justify-content: center;
     align-items: center;
     perspective: 1200px; /* para efecto 3D */
+    background: #f8f2ec;
     cursor: pointer;
   }
 
   #sobre {
-    width: 60vw;  /* ocupa buena parte de la pantalla */
+    width: 60vw;
     max-width: 400px;
+    transition: transform 1s ease-in-out, opacity 0.8s ease;
     transform-origin: top center;
-    transition: transform 1s ease-in-out, opacity 0.5s ease;
   }
 
   #sobre.abierto {
@@ -37,15 +37,19 @@
 
 <script>
   const sobre = document.getElementById('sobre');
-  
+  let animado = false;
+
   document.body.addEventListener('click', () => {
+    if(animado) return; // evitar múltiples clics
+    animado = true;
+
     // Aplicar animación de apertura
     sobre.classList.add('abierto');
 
-    // Esperar la animación antes de redirigir
+    // Redirigir al terminar la animación
     setTimeout(() => {
       window.location.href = 'codigo.html';
-    }, 1000); // coincide con la duración de la transición
+    }, 1000); // duración coincide con transition
   });
 </script>
 </body>
