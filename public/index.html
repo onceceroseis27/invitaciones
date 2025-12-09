@@ -3,33 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pruebas</title>
+  <title>Página de inicio</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       width: 100%;
+      overflow: hidden;
     }
-    img.fullscreen-link {
-      width: 80vw;
-      max-width: 600px;
-      height: auto;
-      display: block;
-      margin: auto;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+
+    body {
+      background: url('images/SobreySello.png') no-repeat center center;
+      background-size: cover;
       cursor: pointer;
     }
   </style>
 </head>
-<body>
-
-  <a href="codigo.html">
-    <img src="images/SobreySello.png" alt="Ir a código" class="fullscreen-link" />
-  </a>
-
+<body onclick="location.href='codigo.html';">
 </body>
 </html>
