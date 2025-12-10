@@ -5,19 +5,57 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Invitación</title>
 
-<!-- Fuente similar a Angel Fade -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<!-- Fuente elegante parecida a Angel Fade -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
 body {
   margin: 0;
-  padding: 20px;
+  padding: 0;
   background: #fffaf7;
-  font-family: 'Georgia', serif;
+  font-family: 'Playfair Display', serif;
 }
 
-h1, h2, p {
+/* Imagen de invitación ocupando ancho completo */
+.invitacion {
+  position: relative;
+  width: 100%;
+  margin: 0; /* sin margen para que quede pegado */
+}
+
+.invitacion img {
+  width: 100%;
+  display: block;
+}
+
+/* Texto centrado SOBRE la imagen */
+.texto-sobre-imagen {
+  position: absolute;
+  top: 50%;           /* centro vertical */
+  left: 50%;
+  transform: translate(-50%, -50%);
   text-align: center;
+  color: black;
+  width: 90%;         /* para evitar que se corte en moviles */
+}
+
+.texto-sobre-imagen h1 {
+  margin: 0.1em 0;
+  font-size: 2.4em;
+  font-weight: 300;   /* más fino */
+  white-space: nowrap; /* asegura que va en una sola línea */
+}
+
+.texto-sobre-imagen h2 {
+  margin: 0.1em 0;
+  font-size: 1.4em;
+  font-weight: 300;   /* más fino */
+}
+
+/* Contenido inferior */
+p {
+  text-align: center;
+  padding: 0 20px;
 }
 
 .boton {
@@ -32,44 +70,7 @@ h1, h2, p {
   font-size: 20px;
   cursor: pointer;
 }
-
-.invitacion {
-  position: relative;
-  width: 100%;
-  max-width: 600px; 
-  margin: 0 auto;
-}
-
-.invitacion img {
-  width: 100%;
-  display: block;
-  border-radius: 12px;
-}
-
-.texto-sobre-imagen {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.texto-sobre-imagen h1,
-.texto-sobre-imagen h2 {
-  margin: 0.2em 0;
-  color: black;
-  font-family: 'Great Vibes', cursive; /* Fuente elegante */
-}
-
-.texto-sobre-imagen h1 {
-  font-size: 3em;
-}
-
-.texto-sobre-imagen h2 {
-  font-size: 2em;
-}
 </style>
-
 <meta http-equiv="Cache-control" content="no-cache">
 </head>
 <body>
@@ -85,10 +86,11 @@ h1, h2, p {
 </div>
 
 <p>Detalles de la invitación aquí…</p>
-<p><strong>Código de vestimenta:</strong> Venid como más cómodos estéis, solo os pedimos evitar vestir con este color.</p>
 
-<div style="display: block; text-align: center; width: 100%; margin-top: 20px;">
-  <img src="images/celadon.png" alt="Color celadón" style="width:150px; border-radius:10px; display: inline-block;">
+<p><strong>Código de vestimenta:</strong> Venid como más cómodos estéis, solo os pedimos evitar vestir con este color para mantener la armonía del día.</p>
+
+<div style="text-align: center; margin-top: 20px;">
+  <img src="images/celadon.png" alt="Color celadón" style="width:150px; border-radius:10px;">
 </div>
 
 <a class="boton" href="Confirmacion.html" target="_blank">
