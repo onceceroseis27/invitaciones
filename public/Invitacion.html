@@ -4,61 +4,60 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Invitación</title>
-
-<!-- Fuente elegante parecida a Angel Fade -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <style>
+
 body {
   margin: 0;
   padding: 0;
   background: #fffaf7;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Georgia', serif;
+  text-align: center;
 }
 
-/* Imagen de invitación ocupando ancho completo */
 .invitacion {
   position: relative;
   width: 100%;
-  height: 100%;
-  margin: 0; /* sin margen para que quede pegado */
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .invitacion img {
   width: 100%;
-  height: 100%;
+  height: 100vh;             /* <<--- Ahora ocupa casi todo el alto de pantalla */
+  object-fit: cover;        /* <<--- Ajusta la imagen manteniendo proporciones */
   display: block;
 }
 
-/* Texto centrado SOBRE la imagen */
 .texto-sobre-imagen {
   position: absolute;
-  top: 50%;           /* centro vertical */
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-align: center;
   color: black;
-  width: 90%;         /* para evitar que se corte en moviles */
+  text-align: center;
 }
 
 .texto-sobre-imagen h1 {
-  margin: 0.1em 0;
-  font-size: 2.4em;
-  font-weight: 300;   /* más fino */
-  white-space: nowrap; /* asegura que va en una sola línea */
-}
+  font-family: "Brush Script MT", cursive; 
+  font-size: 30px; 
+  font-style: normal; 
+  font-variant: normal; 
+  font-weight: 400;   
+  line-height: 20.4px;
+  }
 
-.texto-sobre-imagen h2 {
-  margin: 0.1em 0;
-  font-size: 1.4em;
-  font-weight: 300;   /* más fino */
-}
-
-/* Contenido inferior */
-p {
+.invitacion-fondo {
+  background:#b5c2a8;
+  width: 100vw;
+  height: 100px;
+  color: white; 
   text-align: center;
-  padding: 0 20px;
+  left: 50%;
+
 }
+
+
 
 .boton {
   display: block;
@@ -72,32 +71,36 @@ p {
   font-size: 20px;
   cursor: pointer;
 }
+
 </style>
-<meta http-equiv="Cache-control" content="no-cache">
 </head>
+
 <body>
 
 <div class="invitacion">
   <img src="images/FondoInvitacion.jpg" alt="Fondo Invitación" />
-  
   <div class="texto-sobre-imagen">
     <h2>¡Nos casamos!</h2>
-    <h1>Sergio & Leyre</h1>
+    <h1>Sergio <br><br>
+        & <br><br>
+        Leyre</h1>
     <h2>11 junio 2027</h2>
+    <div class="invitacion-fondo">
+      <h> <br>A veces lo que empieza como una locula<br> se convierte en lo mejor de tu vida <br> &#x2764
+      </h>
+
+    </div>
   </div>
 </div>
 
 <p>Detalles de la invitación aquí…</p>
-
 <p><strong>Código de vestimenta:</strong> Venid como más cómodos estéis, solo os pedimos evitar vestir con este color para mantener la armonía del día.</p>
 
-<div style="text-align: center; margin-top: 20px;">
+<div style="display:block; width:100%; margin-top:20px;">
   <img src="images/celadon.png" alt="Color celadón" style="width:150px; border-radius:10px;">
 </div>
 
-<a class="boton" href="Confirmacion.html" target="_blank">
-  Confirmar asistencia
-</a>
+<a class="boton" href="Confirmacion.html" target="_blank">Confirmar asistencia</a>
 
 </body>
 </html>
