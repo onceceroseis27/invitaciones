@@ -40,7 +40,7 @@ body {
 
 .texto-sobre-imagen h1 {
   font-family: "Brush Script MT", cursive; 
-  font-size: 30px; 
+  font-size: 35px; 
   font-style: normal; 
   font-variant: normal; 
   font-weight: 400;   
@@ -82,7 +82,7 @@ body {
 </head>
 
 <body>
-
+<!-- PRIMERA PLANA -->
 <div class="invitacion">
   <img src="images/FondoInvitacion.jpg" alt="Fondo Invitación" />
   <div class="texto-sobre-imagen">
@@ -90,7 +90,7 @@ body {
     <h1>Sergio <br><br>
         & <br><br>
         Leyre</h1>
-    <h2>11 junio 2027</h2>
+    <h2> SABADO &#124 11 &#124 JUNIO <br><br> &nbsp; &nbsp;2027</h2>
     <div class="invitacion-fondo">
       <h> <br>A veces lo que empieza como una locula<br> se convierte en lo mejor de tu vida <br> &#x2764
       </h>
@@ -99,8 +99,131 @@ body {
   </div>
 </div>
 
-<p>Detalles de la invitación aquí…</p>
-<p><strong>Código de vestimenta:</strong> Venid como más cómodos estéis, solo os pedimos evitar vestir con este color para mantener la armonía del día.</p>
+<!-- CUADRO -->
+<div style="border: 2px solid #b5c2a8;">
+  Con la bendicion del señor del Ayuntamiento y en compañia de nuestros padres
+  <br> <br> <br> 
+  Padres de la novia 
+  <br> <br> 
+  Sr Andres<br> 
+  Sra Encar
+  <br> <br> <br> 
+  Padres del novio
+  <br> <br> 
+  Sr Fernando<br>  
+  Sra Pilar
+  <br> <br> <br> 
+  Nos complace invitarte a ser parte de este gran dia
+
+</div>
+
+<!-- CUENTA ATRÁS -->
+<style>
+.countdown-section {
+  width: 100%;
+  min-height: 100vh;
+  background: url('images/FondoInvitacion.jpg') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* capa para mejorar contraste SIN oscurecer demasiado */
+.countdown-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.countdown-content {
+  position: relative;
+  text-align: center;
+  color: #000;
+  font-family: 'Georgia', serif;
+}
+
+.countdown-content h2 {
+  font-weight: 300;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+
+.countdown {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.time-box {
+  background: rgba(255, 255, 255, 0.75);
+  padding: 18px 22px;
+  border-radius: 14px;
+  min-width: 90px;
+}
+
+.time-box span {
+  display: block;
+  font-size: 36px;
+  font-weight: 300;
+}
+
+.time-box small {
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+</style>
+
+<div class="countdown-section">
+  <div class="countdown-content">
+    <h2>Cuenta atrás para el gran día</h2>
+
+    <div class="countdown">
+      <div class="time-box">
+        <span id="days">0</span>
+        <small>Días</small>
+      </div>
+      <div class="time-box">
+        <span id="hours">0</span>
+        <small>Horas</small>
+      </div>
+      <div class="time-box">
+        <span id="minutes">0</span>
+        <small>Minutos</small>
+      </div>
+      <div class="time-box">
+        <span id="seconds">0</span>
+        <small>Segundos</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const targetDate = new Date("2027-06-11T17:00:00").getTime();
+
+setInterval(() => {
+  const now = new Date().getTime();
+  const distance = targetDate - now;
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  document.getElementById("days").textContent = days;
+  document.getElementById("hours").textContent = hours;
+  document.getElementById("minutes").textContent = minutes;
+  document.getElementById("seconds").textContent = seconds;
+}, 1000);
+</script>
+
+
+<h2><strong>Código de vestimenta</strong><h2>
+<p style="font-weight: normal;"> Venid como más cómodos estéis, solo os pedimos evitar vestir con este color para mantener la armonía del día.</p>
 
 <div style="display:block; width:100%; margin-top:20px;">
   <img src="images/celadon.png" alt="Color celadón" style="width:150px; border-radius:10px;">
