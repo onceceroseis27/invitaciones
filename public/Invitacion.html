@@ -14,72 +14,21 @@ body {
   background: #fffaf7;
   font-family: 'Georgia', serif;
   text-align: center;
+  height: auto;
+  
 }
 
 .invitacion {
-  position: relative;
+  margin: 0;
+  margin-top: 0 !important;
+  padding: 0;
   width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-}
-
-.fecha {
-  white-space: nowrap;          /* NUNCA saltar de línea */
-  text-align: center;
-  font-weight: 300;             /* letra fina */
-  font-size: 4vw ;
-  letter-spacing: 0.15em;
-}
-
-.invitacion img {
-  width: 100%;
-  height: 100vh;             /* <<--- Ahora ocupa casi todo el alto de pantalla */
-  object-fit: cover;        /* <<--- Ajusta la imagen manteniendo proporciones */
-  display: block;
-}
-
-.texto-sobre-imagen {
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: black;
-  text-align: center;
-}
-
-.texto-sobre-imagen h1 {
-  font-family: "Brush Script MT", cursive; 
-  font-size: 35px; 
-  font-style: normal; 
-  font-variant: normal; 
-  font-weight: 400;   
-  line-height: 20.4px;
-  }
-  .texto-sobre-imagen h2 {
-  font-family: "Brush Script MT", cursive; 
-  font-size: 25px; 
-  font-style: normal; 
-  font-variant: normal; 
-  font-weight: 400;   
-  line-height: 20.4px;
-  }
-
-.invitacion-fondo {
-  background:#b5c2a8;
-  width: 100vw;
-  height: 100px;
-  color: white; 
-  text-align: center;
-  left: 50%;
-
-}
-
-.recepcion-fondo {
-  background:#EDFFF0;
-  color: black; 
-  text-align: center;
-  left: 50%;
-
+  min-height: 80vh; 
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-image: url("images/FondoPresentacion.jpeg");
+ 
 }
 
 .boton {
@@ -87,7 +36,7 @@ body {
   width: fit-content;
   margin: 40px auto;
   padding: 14px 28px;
-  background: #EDFFF0;
+  background: #cde0cd;
   color: white;
   text-decoration: none;
   border-radius: 10px;
@@ -107,96 +56,44 @@ body {
   width: 100%;
   height: 100%;
 }
+/* CUENTA ATRÁS */
 .contador-boda {
-  width: 100%;
-  max-width: 600px;
-  height: 350px;
-  background-image: url("images/FondoInvitacion1.jpg"); /* CAMBIA AQUÍ LA IMAGEN */
-  background-size: cover;
-  background-position: center;
-  position: relative;
+  width: 90%;
+  max-width: 400px;
+  height: 250px;
+  margin: 20px auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: black;
-  font-family: 'Arial', sans-serif;
+  border: 5px solid #b5c2a8;
+  background: #fff;
+  border-radius: 15px;
 }
 
 .overlay {
-  position: relative;
   text-align: center;
-  padding: 20px;
 }
-
-.texto-superior,
-.texto-inferior {
-  font-size: 1.4rem;
-  letter-spacing: 2px;
+.texto-superior, .texto-inferior {
+  font-size: 1.2rem;
   text-transform: uppercase;
 }
-
 .contador {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   font-weight: bold;
-  margin: 12px 0;
+  margin: 10px 0;
 }
 
-/* Móvil */
-@media (max-width: 480px) {
-  .contador {
-    font-size: 1.6rem;
-  }
-  .texto-superior,
-  .texto-inferior {
-    font-size: 1.1rem;
-  }
-}
-:root {
-  --verde: #6b8f71;
-  --verde-suave: #eef3ef;
-}
-
-.detalles-wrap {
-  background: var(--verde-suave);
-  padding: 100px 20px;
-}
-
-.titulo {
-  text-align: center;
-  margin-bottom: 80px;
-  font-size: 2rem;
-}
-
-.detalles {
-  max-width: 1100px;
-  margin: auto;
-  display: flex;
-  gap: 60px;
-}
-
-.btn-maps {
-    display: inline-block;
-    background-color: #9be7a1; /* verde clarito */
-    color: #0b3d1f;
-    padding: 14px 22px;
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: 600;
-    font-family: Arial, sans-serif;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-
-  .btn-maps:hover {
-    background-color: #7fd88a;
-    transform: scale(1.05);
-  }
 /* css del scroll */
 /* =========================
    CONTENEDOR GENERAL
 ========================= */
 .timeline-section {
-  display: flex;
-  width: 100%;
+   display: flex;
+  flex-direction: row;
+  align-items: flex-start; /* que los hijos crezcan */
+  height: auto;            /* 📌 no limitar la altura */
+  overflow: visible;
+  margin-bottom: 50px;     /* espacio hasta dress-code */
 }
 
 /* =========================
@@ -288,6 +185,7 @@ body {
 .timeline-right {
   flex: 1;
   padding-left: 40px;
+  min-height: 100%;
 }
 
 /* =========================
@@ -314,7 +212,57 @@ body {
   transform: translateY(0);
 }
 
+.dress-code{
+  .dress-code * {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+  position: static !important;
+  position: relative;
+  z-index: 10;
+  padding: 80px 20px;
+}
+}
 
+.disfruta {
+  margin: 0;
+  margin-top: 0 !important;
+  padding: 0;
+  width: 100%;
+  min-height: 80vh; 
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-image: url("images/Disfruta.jpg");
+ 
+}
+.ubi {
+  margin: 0;
+  margin-top: 0 !important;
+  padding: 0;
+  width: 100%;
+  min-height: 80vh; 
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-image: url("images/Ubicacion.jpg");
+ 
+}
+.logo {
+  margin: 0;
+  margin-top: 0 !important;
+  padding: 0;
+  width: 100%;
+  min-height: 80vh; 
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-image: url("images/Logo.png");
+ 
+}
+
+
+  
 
 </style>
 </head>
@@ -322,79 +270,30 @@ body {
 <body>
 <!-- PRIMERA PLANA -->
 <div class="invitacion">
-  <img src="images/FondoInvitacion.jpg" alt="Fondo Invitación" />
-  <div class="texto-sobre-imagen">
-    <h2>¡Nos casamos!</h2>
-    <h1>Sergio <br><br>
-        & <br><br>
-        Leyre</h1>
-    <h2 class="fecha">VIERNES &#124; 11 &#124; JUNIO </h2>
-    <h2>2027</h2>
-    <div class="invitacion-fondo">
-      <h> <br>A veces lo que empieza como una locura<br> se convierte en lo mejor de tu vida <br> &#x2764
-      </h>
+ 
+</div>
+
+<!-- CUADRO CUENTA ATRÁS -->
+
+<div style="padding: 20px; ">
+  <div style="border: 5px solid #b5c2a8; padding: 20px;">
+    <div class="contador-boda">
+      <div class="overlay"><br>
+        <div class="texto-superior">Faltan</div>
+        <div id="contador" class="contador"></div>
+        <div class="texto-inferior">para el gran día</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- CUADRO -->
-<div style="border: 2px solid #b5c2a8;">
-  Con la bendicion del señor del Ayuntamiento y en compañia de nuestros padres
-  <br> <br> <br> 
-  Padres de la novia 
-  <br> <br> 
-  Sr Andres<br> 
-  Sra Encar
-  <br> <br> <br> 
-  Padres del novio
-  <br> <br> 
-  Sr Fernando<br>  
-  Sra Pilar
-  <br> <br> <br> 
-  Nos complace invitarte a ser parte de este gran dia
-</div>
-
-
 <br> <br> <br> 
-<!-- CUENTA ATRÁS -->
-<div class="contador-boda">
-  <div class="overlay">
-    <br>
-    <div class="texto-superior">Faltan</div>
-    <div id="contador" class="contador"></div>
-    <div class="texto-inferior">para el gran día</div>
-  </div>
-</div>
 
-<h2>Dónde y Cuándo</h2> 
 
-<!-- CUADRO CEREMONIA -->
-<div class="recepcion-fondo" style="border: 2px solid #b5c2a8;">
-  <img src="images/Ceremonia.jpeg" alt="Imagen Ceremonia" width="350" height="300">
-  <h3> Ceremonia Civil </h3><br>
-  <h> Finca Rovallines </h><br><br>
-  <h> 17:00 </h><br><br>
-  <h> Diseminado Caviedes, 38A,<br>  39593 Caviedes, Cantabria </h> <br><br>
-  <a  href="https://maps.app.goo.gl/fJvVuQgWa1ybVZDm9" target="_blank" class="btn-maps"> Cómo llegar </a>
-  <br><br>
-</div>
 
-<br><br><br>
-
-<!-- CUADRO RECEPCION -->
-<div class="recepcion-fondo" style="border: 2px solid #b5c2a8;" width="350">
-  <img src="images/Comedor.jpeg" alt="Imagen Comedor" width="350" height="300">
-  <h3> Recepcion </h3><br>
-  <h> Finca Rovallines </h><br><br>
-  <h> 18:00 </h><br><br>
-  <h> Diseminado Caviedes, 38A,<br>  39593 Caviedes, Cantabria </h> <br><br>
-   <a  href="https://maps.app.goo.gl/fJvVuQgWa1ybVZDm9" target="_blank" class="btn-maps"> Cómo llegar </a>
-  <br><br>
-</div>
 
 
 <h2>Te compartimos los detalles de la celebración</h2>
-
 <!-- SCROLL RELLENABLE -->
 <!-- Font Awesome -->
 <section class="timeline-section">
@@ -443,11 +342,24 @@ body {
   </div>
 </section>
 
+<div  class= "dress-code"> 
+  <h2><strong>DRESS CODE</strong></h2>
+  <p style="font-weight: normal;"> Evita venir vestido de este color</p>
+  <img src="images/celadon.png" alt="Color celadón" style="width:150px; border-radius:10px;">
+</div>
 
 
+<div class="disfruta">
+ 
+</div>
+<div class="ubi">
+ 
+</div>
+<a class="boton" href="Confirmacion.html" target="_blank">Confirmar asistencia</a>
 
-
-
+<div class="logo">
+ 
+</div>
 <!-- CUENTA ATRÁS -->
 <script>
 function actualizarContador() {
@@ -551,23 +463,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
-
-
-<div style="display:block; width:100%; margin-top:20px;">
-  <h2><strong>Código de vestimenta</strong><h2>
-  <p style="font-weight: normal;"> Venid como más cómodos estéis, solo os pedimos evitar vestir con este color para mantener la armonía del día.</p>
-
-
-  <img src="images/celadon.png" alt="Color celadón" style="width:150px; border-radius:10px;">
-</div>
-
-
- <h2> Como llegar </h2>
+<!--
 <div class="map-responsive">
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2901.9273220548894!2d-4.3388649239768045!3d43.33670987111883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd490bc27da2977d%3A0x1ea2aaf864dbe092!2sFinca%20Rovallines!5e0!3m2!1ses!2ses!4v1765888998759!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+ <h2> Como llegar </h2>
+   <iframe style= "width: 100%; height: 100%; position: absolute;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2901.9273220548894!2d-4.3388649239768045!3d43.33670987111883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd490bc27da2977d%3A0x1ea2aaf864dbe092!2sFinca%20Rovallines!5e0!3m2!1ses!2ses!4v1765888998759!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 </div>  
-<a class="boton" href="Confirmacion.html" target="_blank">Confirmar asistencia</a>
-
+-->
 </body>
 </html>
