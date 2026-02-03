@@ -27,22 +27,11 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: top center;
-  background-image: url("images/FondoPresentacion.jpeg");
+  background-image: url("images/FondoPresentacion.JPG");
  
 }
 
-.boton {
-  display: block;
-  width: fit-content;
-  margin: 40px auto;
-  padding: 14px 28px;
-  background: #cde0cd;
-  color: white;
-  text-decoration: none;
-  border-radius: 10px;
-  font-size: 20px;
-  cursor: pointer;
-}
+
 .map-responsive {
   position: relative;
   padding-bottom: 56.25%; /* 16:9 */
@@ -228,36 +217,91 @@ body {
   margin: 0;
   margin-top: 0 !important;
   padding: 0;
-  width: 100%;
-  min-height: 80vh; 
-  background-size: contain;
+  width: auto;
+  min-height: 100vh; 
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: top center;
   background-image: url("images/Disfruta.JPG");
  
 }
+.ubi::after {
+  content: "📍 Toca para abrir en Google Maps";
+  position: absolute;
+  top: 500px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.65);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 20px;
+  font-size: 15px;
+  pointer-events: none; /* ⬅️ no bloquea el click */
+}
+
 .ubi {
+  position: relative;
   margin: 0;
   margin-top: 0 !important;
   padding: 0;
-  width: 100%;
-  min-height: 80vh; 
-  background-size: contain;
+  width:auto;
+  min-height: 100vh; 
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: top center;
   background-image: url("images/Ubicacion.JPG");
  
 }
-.logo {
+.map-link {
+  display: block;
+}
+
+.confirmacion {
   margin: 0;
-  margin-top: 0 !important;
   padding: 0;
   width: 100%;
-  min-height: 80vh; 
-  background-size: contain;
+  min-height: 100vh;           /* ocupa toda la pantalla de largo */
+  background-image: url("images/Confir.jpeg");
+  background-size: cover;      /* que la imagen ocupe todo el div */
   background-repeat: no-repeat;
-  background-position: top center;
+  background-position: center center;
+
+  /* para colocar el botón */
+  position: relative;          
+  display: flex;
+  justify-content: center;     /* centrado horizontal */
+  align-items: center;         /* centrado vertical */
+}
+
+.confirmacion .boton {
+   position: absolute;           /* puedes moverlo libremente dentro del div */
+  top: 60%;                     /* altura: 50% del div */
+  left: 50%;                    /* centrado horizontal */
+  transform: translate(-50%, -50%); /* centra el botón exactamente en el punto */
+  
+  width: 200px;                 /* ancho del botón */
+  height: 60px;                 /* alto del botón */
+  background-color: #cde0cd;   /* color del botón */
+  border-radius: 10px;
+  text-decoration: none;        /* si quieres texto, se ve limpio */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+
+.logo {
+  width: 100%;
+  height: 60vh;                 /* AJUSTA: 60–80vh suele ir perfecto */
   background-image: url("images/Logo.PNG");
+  background-size: cover;       /* ⬅️ aquí está la clave */
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
  
 }
 
@@ -348,11 +392,18 @@ body {
 
 <div class="disfruta">
  
-</div>
-<div class="ubi">
+</div> 
+
+<a href="https://www.google.com/maps/dir/?api=1&destination=43.3367099,-4.3388649"
+   target="_blank"
+   class="map-link">
+  <div class="ubi"></div>
+</a>
+  
  
+<div class="confirmacion">
+  <a href="Confirmacion.html" class="boton">Confirmar asistencia</a>
 </div>
-<a class="boton" href="Confirmacion.html" target="_blank">Confirmar asistencia</a>
 
 <div class="logo">
  
