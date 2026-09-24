@@ -7,7 +7,14 @@
 <link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <style>
+* {
+  box-sizing: border-box;
+}
 
+body, h1, h2, h3, p, div {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
 body {
   margin: 0;
   padding: 0;
@@ -19,16 +26,15 @@ body {
 }
 
 .invitacion {
-  margin: 0;
-  margin-top: 0 !important;
+  margin: 0 !important;
   padding: 0;
-  width: auto;
-  min-height: 90vh; 
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: top center;
+  width: 100%;
+  aspect-ratio: 9 / 16; /* Mantiene la proporción de la primera imagen sin dejar espacios sobrantes */
   background-image: url("images/FondoPresentacion.JPG");
- 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: block;
 }
 
 /* CUENTA ATRÁS */
@@ -187,16 +193,11 @@ body {
   transform: translateY(0);
 }
 
-.dress-code{
-  .dress-code * {
-  opacity: 1 !important;
-  transform: none !important;
-  visibility: visible !important;
-  position: static !important;
+.dress-code {
   position: relative;
   z-index: 10;
-  padding: 80px 20px;
-}
+  padding: 40px 20px;
+  margin: 0 !important;
 }
 
 .disfruta {
@@ -211,6 +212,71 @@ body {
   background-image: url("images/Disfruta.JPG");
  
 }
+
+.Foto {
+  margin: 0 !important;
+  padding: 0;
+  width: 100%;
+  aspect-ratio: 9 / 16; /* La foto del anillo se pega directamente a la anterior */
+  background-image: url("images/Anillo.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: block;
+}
+
+/* Ajuste del contenedor general */
+.bus {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  background-image: url("images/buses.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0 !important;
+  padding: 0;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Contenedor de botones en PARALELO */
+.botones-whatsapp {
+  width: 90%; /* Ocupa el 90% del ancho de la pantalla */
+  max-width: 400px;
+  display: flex;
+  flex-direction: row; /* Coloca los botones uno al lado del otro */
+  justify-content: center;
+  gap: 10px; /* Espacio entre ambos botones */
+  margin-bottom: 200px; /* Aumentado a 90px para SUBIRLOS más hacia arriba */
+}
+
+/* Estilo de los botones MÁS ANCHOS */
+.btn-ws {
+  flex: 1; /* Hace que ambos botones crezcan por igual ocupando todo el ancho disponible */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 8px; /* Altura interior del botón */
+  background-color: #a3b899;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.85rem; /* Tamaño de fuente adecuado para que no se amontone en móvil */
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-ws:active {
+  transform: scale(0.96);
+  background-color: #1ebc57;
+}
+
+
 .ubi::after {
   content: "📍 Toca para abrir en Google Maps";
   position: absolute;
@@ -281,11 +347,15 @@ body {
 
 .logo {
   width: 100%;
-  height: 60vh;                 /* AJUSTA: 60–80vh suele ir perfecto */
+  /* Define la proporción aproximada de la imagen del logo */
+  aspect-ratio: 4 / 3; 
   background-image: url("images/Logo.PNG");
-  background-size: cover;       /* ⬅️ aquí está la clave */
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  margin: 0 !important;
+  padding: 0;
+  display: block;
 }
 
  
@@ -297,6 +367,10 @@ body {
 <body>
 <!-- PRIMERA PLANA -->
 <div class="invitacion">
+ 
+</div>
+
+<div class="Foto">
  
 </div>
 
@@ -372,7 +446,7 @@ body {
 <div  class= "dress-code"> 
   <h2><strong>DRESS CODE</strong></h2>
   <p style="font-weight: normal;"> Evita venir vestido de este color</p>
-  <img src="images/celadon.png" alt="Color celadón" style="width:150px; border-radius:10px;">
+  <img src="images/celadon.jpeg" alt="Color celadón" style="width:150px; border-radius:10px;">
 </div>
 
 
@@ -387,13 +461,36 @@ body {
 </a>
   
  
+<div class="logo">
+ 
+</div>
+
+<div class="bus">
+ <!-- Contenedor interno para los botones -->
+  <div class="botones-whatsapp">
+    <!-- Reemplaza 34600000000 con el número real incluyendo prefijo de país sin '+' ni espacios (ej: 34 para España) -->
+    <a href="https://wa.me/34676908084?text=Hola,%20tengo%20una%20consulta%20sobre%20los%20autobuses" target="_blank" class="btn-ws">
+      <i class="fa-brands fa-whatsapp"></i> Leyre
+    </a>
+
+    <a href="https://wa.me/34635280926?text=Hola,%20tengo%20una%20consulta%20sobre%20los%20autobuses" target="_blank" class="btn-ws">
+      <i class="fa-brands fa-whatsapp"></i> Sergio
+    </a>
+  </div>
+</div>
+
 <div class="confirmacion">
   <a href="Confirmacion.html" class="boton">Confirmar asistencia</a>
 </div>
 
-<div class="logo">
- 
-</div>
+
+<!-- Elemento de audio invisible sin controles flotantes -->
+<audio id="musicaBoda" loop preload="auto">
+  <source src="music/canon.mp3#t=50" type="audio/mpeg">
+  Tu navegador no soporta el reproductor de audio.
+</audio>
+
+
 <!-- CUENTA ATRÁS -->
 <script>
 function actualizarContador() {
@@ -495,13 +592,31 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 
+<!-- SCRIPT MUSICA -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const audio = document.getElementById("musicaBoda");
 
+  // Intenta reproducir la música inmediatamente al cargar la página
+  const intromusica = audio.play();
 
-<!--
-<div class="map-responsive">
- <h2> Como llegar </h2>
-   <iframe style= "width: 100%; height: 100%; position: absolute;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2901.9273220548894!2d-4.3388649239768045!3d43.33670987111883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd490bc27da2977d%3A0x1ea2aaf864dbe092!2sFinca%20Rovallines!5e0!3m2!1ses!2ses!4v1765888998759!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-</div>  
--->
+  if (intromusica !== undefined) {
+    intromusica.catch(() => {
+      // Si el navegador bloquea el autoplay por políticas estrictas del dispositivo,
+      // la música arrancará al primer toque o scroll que haga el invitado en la invitación
+      const arrancarAlPrimerContacto = () => {
+        audio.play();
+        document.removeEventListener("touchstart", arrancarAlPrimerContacto);
+        document.removeEventListener("click", arrancarAlPrimerContacto);
+        document.removeEventListener("scroll", arrancarAlPrimerContacto);
+      };
+
+      document.addEventListener("touchstart", arrancarAlPrimerContacto, { once: true });
+      document.addEventListener("click", arrancarAlPrimerContacto, { once: true });
+      document.addEventListener("scroll", arrancarAlPrimerContacto, { once: true });
+    });
+  }
+});
+</script>
 </body>
 </html>
