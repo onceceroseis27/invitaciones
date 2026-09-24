@@ -213,6 +213,53 @@ body {
  
 }
 
+/* Contenedor .cancion configurado para superponer elementos */
+.cancion {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16; /* Mantiene la proporción móvil de tus otras secciones */
+  background-image: url("images/Cancion.jpeg"); /* Ajusta según tu imagen de fondo */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0 !important;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Botón transparente con imagen superpuesta */
+.btn-imagen-cancion {
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 10;
+  display: inline-block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Tamaño y estilo de la imagen del botón */
+.btn-imagen-cancion img {
+  width: 500px; /* Ajusta el tamaño de la imagen del botón según prefieras */
+  margin-bottom: 250px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3)); /* Sombra para resaltar sobre el fondo */
+}
+
+/* Efecto visual al tocar o presionar */
+.btn-imagen-cancion:active {
+  transform: scale(0.92);
+}
+
+/* Opcional: Ligera animación / opacidad cuando está sonando */
+.btn-imagen-cancion.reproduciendo img {
+  opacity: 0.9;
+}
+
 .Foto {
   margin: 0 !important;
   padding: 0;
@@ -366,6 +413,19 @@ body {
 
 <body>
 <!-- PRIMERA PLANA -->
+<div class="cancion">
+ <!-- Botón superpuesto con imagen -->
+  <button id="btnControlAudio" class="btn-imagen-cancion" aria-label="Reproducir o pausar música">
+    <img id="imgBotonAudio" src="images/reproductor.png" alt="Play/Pause Música" />
+  </button>
+
+  <!-- Elemento de audio -->
+  <audio id="musicaBoda" loop preload="auto" playsinline>
+    <source src="music/Perfect.mp3" type="audio/mpeg">
+    Tu navegador no soporta el reproductor de audio.
+  </audio>
+</div>
+
 <div class="invitacion">
  
 </div>
@@ -486,7 +546,7 @@ body {
 
 <!-- Elemento de audio invisible sin controles flotantes -->
 <audio id="musicaBoda" loop preload="auto" playsinline>
-  <source src="music/canon.mp3#t=50" type="audio/mpeg">
+  <source src="music/Perfect.mp3" type="audio/mpeg">
   Tu navegador no soporta el reproductor de audio.
 </audio>
 
@@ -596,25 +656,55 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const audio = document.getElementById("musicaBoda");
-  const segundoInicio = 50; // Cambia 30 por el segundo exacto donde quieres que empiece
+  const btn = document.getElementById("btnControlAudio");
+  const imgBtn = document.getElementById("imgBotonAudio");
+  const segundoInicio = 30; // Ajusta el segundo de inicio de la canción
 
-  function activarMusicaMovil() {
-    audio.currentTime = segundoInicio;
-    
-    audio.play().then(() => {
-      // Si el móvil permite reproducir, quitamos los escuchadores para no reiniciar el audio al volver a tocar
-      document.removeEventListener("touchstart", activarMusicaMovil);
-      document.removeEventListener("click", activarMusicaMovil);
-    }).catch(error => {
-      console.log("Esperando toque directo del usuario en el móvil.");
-    });
+  let reproducido = false;
+
+  // OPCIONAL: Si deseas cambiar la imagen según el estado (Play / Pause)
+  const rutaImagenPlay = "images/reproductor.png"; 
+  const rutaImagenPause = "images/reproductorPausa.png"; // Si solo tienes una imagen, no cambies nada
+
+  function alternarAudio() {
+    if (audio.paused) {
+      if (!reproducido) {
+        audio.currentTime = segundoInicio;
+        reproducido = true;
+      }
+      audio.play().then(() => {
+        btn.classList.add("reproduciendo");
+        if (rutaImagenPause) imgBtn.src = rutaImagenPause;
+      }).catch(err => {
+        console.log("Error al reproducir audio:", err);
+      });
+    } else {
+      audio.pause();
+      btn.classList.remove("reproduciendo");
+      if (rutaImagenPlay) imgBtn.src = rutaImagenPlay;
+    }
   }
 
-  // Se activa con el primer toque o clic que haga el invitado en cualquier parte de la pantalla
-  document.addEventListener("touchstart", activarMusicaMovil, { once: true });
-  document.addEventListener("click", activarMusicaMovil, { once: true });
+  // Clic directo sobre la imagen del botón
+  btn.addEventListener("click", alternarAudio);
+
+  // Respaldo para iniciar al primer toque en la pantalla
+  const intentoPrimerToque = () => {
+    if (audio.paused && !reproducido) {
+      audio.currentTime = segundoInicio;
+      audio.play().then(() => {
+        reproducido = true;
+        btn.classList.add("reproduciendo");
+        if (rutaImagenPause) imgBtn.src = rutaImagenPause;
+      }).catch(() => {});
+    }
+    document.removeEventListener("click", intentoPrimerToque);
+    document.removeEventListener("touchstart", intentoPrimerToque);
+  };
+
+  document.addEventListener("click", intentoPrimerToque, { once: true });
+  document.addEventListener("touchstart", intentoPrimerToque, { once: true });
 });
-</script>
 </script>
 </body>
 </html>
