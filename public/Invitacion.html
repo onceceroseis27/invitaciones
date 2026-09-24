@@ -445,8 +445,8 @@ body {
 
 <div  class= "dress-code"> 
   <h2><strong>DRESS CODE</strong></h2>
-  <p style="font-weight: normal;"> Evita venir vestido de este color</p>
-  <img src="images/celadon.jpeg" alt="Color celadón" style="width:150px; border-radius:10px;">
+  <p style="font-weight: normal;"> Evita venir vestido de esta gama de colores</p>
+  <img src="images/celadon.png" alt="Color celadón" style="width:150px; border-radius:10px;">
 </div>
 
 
@@ -485,7 +485,7 @@ body {
 
 
 <!-- Elemento de audio invisible sin controles flotantes -->
-<audio id="musicaBoda" loop preload="auto">
+<audio id="musicaBoda" loop preload="auto" playsinline>
   <source src="music/canon.mp3#t=50" type="audio/mpeg">
   Tu navegador no soporta el reproductor de audio.
 </audio>
@@ -596,27 +596,47 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const audio = document.getElementById("musicaBoda");
+  const segundoInicio = 30; // Ajusta aquí el segundo donde quieres que empiece (o 0 para el inicio)
 
-  // Intenta reproducir la música inmediatamente al cargar la página
-  const intromusica = audio.play();
+  let musicaIniciada = false;
 
-  if (intromusica !== undefined) {
-    intromusica.catch(() => {
-      // Si el navegador bloquea el autoplay por políticas estrictas del dispositivo,
-      // la música arrancará al primer toque o scroll que haga el invitado en la invitación
-      const arrancarAlPrimerContacto = () => {
-        audio.play();
-        document.removeEventListener("touchstart", arrancarAlPrimerContacto);
-        document.removeEventListener("click", arrancarAlPrimerContacto);
-        document.removeEventListener("scroll", arrancarAlPrimerContacto);
-      };
+  function reproducirAudio() {
+    if (musicaIniciada) return;
 
-      document.addEventListener("touchstart", arrancarAlPrimerContacto, { once: true });
-      document.addEventListener("click", arrancarAlPrimerContacto, { once: true });
-      document.addEventListener("scroll", arrancarAlPrimerContacto, { once: true });
-    });
+    audio.currentTime = segundoInicio;
+    
+    // Intenta reproducir
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          musicaIniciada = true;
+          // Si logró sonar, removemos los escuchadores de eventos
+          removerEventos();
+        })
+        .catch((error) => {
+          // El móvil bloqueó el intento automático, esperará al gesto del usuario
+          console.log("Esperando interacción del usuario para reproducir audio.");
+        });
+    }
   }
+
+  function removerEventos() {
+    document.removeEventListener("touchstart", reproducirAudio);
+    document.removeEventListener("click", reproducirAudio);
+    document.removeEventListener("scroll", reproducirAudio);
+  }
+
+  // 1. Intento de reproducción inmediata al cargar
+  reproducirAudio();
+
+  // 2. Escuchadores de respaldo para móviles (se activan al tocar o deslizar la pantalla)
+  document.addEventListener("touchstart", reproducirAudio, { passive: true });
+  document.addEventListener("click", reproducirAudio);
+  document.addEventListener("scroll", reproducirAudio, { passive: true });
 });
+</script>
 </script>
 </body>
 </html>
