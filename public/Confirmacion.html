@@ -18,9 +18,10 @@
 <body>
 <form id="formulario">
   <h2>Confirmación de asistencia</h2>
-    <label for="nombres">Nombre(s) (si no vas, indica tu nombre)</label>
-      <input id="nombres" type="text" placeholder="Ej: Ana García" required />
-      <label for="asistencia">¿Asistirás?</label>
+  <label for="nombres">Nombre(s) (si no vas, indica tu nombre)</label>
+  <input id="nombres" type="text" placeholder="Ej: Ana García" required />
+  
+  <label for="asistencia">¿Asistirás?</label>
   <select id="asistencia" required>
     <option value="">Selecciona...</option>
     <option value="Sí">Sí</option>
@@ -56,7 +57,8 @@
         <option value="">Seleccione...</option>
         <option value="Pedroso">Pedroso</option>
         <option value="Cayón">Cayón</option>
-        <option value="Punete Viesgo">Puente Viesgo</option>
+        <!-- CORREGIDO: "Puente Viesgo" -->
+        <option value="Puente Viesgo">Puente Viesgo</option>
       </select>
     </div>
 
@@ -103,6 +105,7 @@ const hora = $('hora');
 const comentarios = $('comentarios');
 const errorBox = $('error');
 const submitBtn = $('submitBtn');
+
 const now = new Date();
 const fechaFormateada = now.getFullYear() + "-" 
                        + String(now.getMonth() + 1).padStart(2,'0') + "-"
@@ -126,6 +129,8 @@ asistencia.addEventListener('change', () => {
     hide(blockSalida);
     num_personas.required = false;
     usar_bus.required = false;
+    num_personas.value = '';
+    usar_bus.value = '';
   }
 });
 
@@ -143,6 +148,10 @@ usar_bus.addEventListener('change', () => {
     salida.required = false;
     llegada.required = false;
     hora.required = false;
+    trayectos.value = '';
+    salida.value = '';
+    llegada.value = '';
+    hora.value = '';
   }
 });
 
@@ -153,6 +162,7 @@ trayectos.addEventListener('change', () => {
   } else {
     hide(blockSalida);
     salida.required = false;
+    salida.value = '';
   }
 });
 
@@ -163,41 +173,43 @@ form.addEventListener('submit', async (ev) => {
   // Validaciones
   if (!asistencia.value) { showError('Selecciona si asistirás o no.'); return; }
   if (!nombres.value.trim()) { showError('Indica el nombre aunque no asistas.'); return; }
-  if (asistencia.value === 'Sí' && (!num_personas.value || Number(num_personas.value) < 1)) { showError('Indica un número de personas válido.'); return; }
+  if (asistencia.value === 'Sí' && (!num_personas.value || Number(num_personas.value) < 1)) { 
+    showError('Indica un número de personas válido.'); return; 
+  }
   if (asistencia.value === 'Sí' && usar_bus.value === 'Sí') {
     if (!trayectos.value) { showError('Selecciona trayecto'); return; }
-    if ((trayectos.value === 'Ida' || trayectos.value === 'Ida y vuelta') && !salida.value) { showError('Selecciona lugar de salida'); return; }
+    if ((trayectos.value === 'Ida' || trayectos.value === 'Ida y vuelta') && !salida.value) { 
+      showError('Selecciona lugar de salida'); return; 
+    }
     if (!llegada.value) { showError('Selecciona lugar de llegada'); return; }
     if (!hora.value) { showError('Selecciona hora de salida'); return; }
   }
 
-const payload = {
-  num_personas: (asistencia.value === 'Sí') ? (num_personas.value || '') : '',
-  nombres: nombres.value.trim(),
-  asistencia: asistencia.value,
-  fecha: fechaFormateada,
-  comentarios: comentarios.value.trim() || '',
-  bus: (asistencia.value === 'Sí') ? (usar_bus.value || 'No') : '',
-  trayectos: (usar_bus.value === 'Sí') ? (trayectos.value || '') : '',
-  salida: (usar_bus.value === 'Sí') ? (salida.value || '') : '',
-  llegada: (usar_bus.value === 'Sí') ? (llegada.value || '') : '',
-  hora: (usar_bus.value === 'Sí') ? (hora.value || '') : ''
-};
+  const payload = {
+    num_personas: (asistencia.value === 'Sí') ? (num_personas.value || '') : '',
+    nombres: nombres.value.trim(),
+    asistencia: asistencia.value,
+    fecha: fechaFormateada,
+    comentarios: comentarios.value.trim() || '',
+    bus: (asistencia.value === 'Sí') ? (usar_bus.value || 'No') : '',
+    trayectos: (usar_bus.value === 'Sí') ? (trayectos.value || '') : '',
+    salida: (usar_bus.value === 'Sí') ? (salida.value || '') : '',
+    llegada: (usar_bus.value === 'Sí') ? (llegada.value || '') : '',
+    hora: (usar_bus.value === 'Sí') ? (hora.value || '') : ''
+  };
 
-
-
-  // Deshabilitar botón y mostrar “Enviando…”
   submitBtn.disabled = true;
   submitBtn.textContent = 'Enviando...';
 
   try {
-    const res = await fetch(SCRIPT_URL, {
+    // CORREGIDO: Se añade `mode: 'no-cors'` para evitar el error con Google Apps Script
+    await fetch(SCRIPT_URL, {
       method: 'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
       body: new URLSearchParams(payload).toString()
     });
 
-    // Redirigir aunque la respuesta no tenga CORS
     window.location.href = 'mensaje.html?nombre=' + encodeURIComponent(payload.nombres);
 
   } catch (err) {
