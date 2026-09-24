@@ -596,45 +596,23 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const audio = document.getElementById("musicaBoda");
-  const segundoInicio = 30; // Ajusta aquí el segundo donde quieres que empiece (o 0 para el inicio)
+  const segundoInicio = 50; // Cambia 30 por el segundo exacto donde quieres que empiece
 
-  let musicaIniciada = false;
-
-  function reproducirAudio() {
-    if (musicaIniciada) return;
-
+  function activarMusicaMovil() {
     audio.currentTime = segundoInicio;
     
-    // Intenta reproducir
-    const playPromise = audio.play();
-
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          musicaIniciada = true;
-          // Si logró sonar, removemos los escuchadores de eventos
-          removerEventos();
-        })
-        .catch((error) => {
-          // El móvil bloqueó el intento automático, esperará al gesto del usuario
-          console.log("Esperando interacción del usuario para reproducir audio.");
-        });
-    }
+    audio.play().then(() => {
+      // Si el móvil permite reproducir, quitamos los escuchadores para no reiniciar el audio al volver a tocar
+      document.removeEventListener("touchstart", activarMusicaMovil);
+      document.removeEventListener("click", activarMusicaMovil);
+    }).catch(error => {
+      console.log("Esperando toque directo del usuario en el móvil.");
+    });
   }
 
-  function removerEventos() {
-    document.removeEventListener("touchstart", reproducirAudio);
-    document.removeEventListener("click", reproducirAudio);
-    document.removeEventListener("scroll", reproducirAudio);
-  }
-
-  // 1. Intento de reproducción inmediata al cargar
-  reproducirAudio();
-
-  // 2. Escuchadores de respaldo para móviles (se activan al tocar o deslizar la pantalla)
-  document.addEventListener("touchstart", reproducirAudio, { passive: true });
-  document.addEventListener("click", reproducirAudio);
-  document.addEventListener("scroll", reproducirAudio, { passive: true });
+  // Se activa con el primer toque o clic que haga el invitado en cualquier parte de la pantalla
+  document.addEventListener("touchstart", activarMusicaMovil, { once: true });
+  document.addEventListener("click", activarMusicaMovil, { once: true });
 });
 </script>
 </script>
